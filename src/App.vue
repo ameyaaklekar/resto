@@ -1,32 +1,26 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view />
+    <button @click.prevent="login">Login</button>
   </div>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+import axios from "axios"
 
-#nav {
-  padding: 30px;
-}
+export default {
+  methods: {
+    async login() {
+      await axios.get("http://localhost:8000/sanctum/csrf-cookie")
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
+      await axios.post("http://localhost:8000/login", {
+        email: "ameya@gmail.com",
+        password: "Ameya1993"
+      })
 
-#nav a.router-link-exact-active {
-  color: #42b983;
+      let response = await axios.get("http://localhost:8000/api/user")
+
+      console.log(response.data)
+    }
+  }
 }
-</style>
+</script>
