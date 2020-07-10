@@ -1,76 +1,41 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Navbar</a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-toggle="collapse"
-      data-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
+  <b-navbar toggleable="lg" type="dark" variant="dark">
+    <b-navbar-brand href="/">NavBar</b-navbar-brand>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-          <router-link
-            class="nav-link"
-            :to="{
-              name: 'Home'
-            }"
-          >
-            Home
-          </router-link>
-        </li>
-        <template v-if="authenticated">
-          <li class="nav-item">
-            <router-link
-              class="nav-link"
-              :to="{
-                name: 'Dashboard'
-              }"
-            >
-              Dashboard
-            </router-link>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              Sign Out
-            </a>
-          </li>
-        </template>
-        <template v-else>
-          <li class="nav-item">
-            <router-link
-              class="nav-link"
-              :to="{
-                name: 'Register'
-              }"
-            >
-              Register
-            </router-link>
-          </li>
-          <li class="nav-item">
-            <router-link
-              class="nav-link"
-              :to="{
-                name: 'SignIn'
-              }"
-            >
-              Sign In
-            </router-link>
-          </li>
-        </template>
-      </ul>
-    </div>
-  </nav>
+    <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+
+    <b-collapse id="nav-collapse" is-nav>
+      <template v-if="authenticated">
+        <b-navbar-nav>
+          <b-nav-item :to="{ name: 'Dashboard' }">Dashboard</b-nav-item>
+        </b-navbar-nav>
+      </template>
+      <template v-else>
+        <b-navbar-nav>
+          <b-nav-item :to="{ name: 'Register' }">Register</b-nav-item>
+        </b-navbar-nav>
+      </template>
+
+      <!-- Right aligned nav items -->
+      <b-navbar-nav class="ml-auto" v-if="user && authenticated">
+        <b-nav-item-dropdown right>
+          <!-- Using 'button-content' slot -->
+          <template v-slot:button-content>
+            <em>{{ user.name }}</em>
+          </template>
+          <b-dropdown-item :to="{ name: 'Profile' }">Profile</b-dropdown-item>
+          <b-dropdown-item href="#" @click.prevent="signOut">Sign Out</b-dropdown-item>
+        </b-nav-item-dropdown>
+      </b-navbar-nav>
+      <div class="ml-auto" v-else>
+        <b-link :to="{ name: 'SignIn' }" class="btn btn-outline-success">Sign In</b-link>
+      </div>
+    </b-collapse>
+  </b-navbar>
 </template>
 
 <script>
-import { mapGetters } from "vuex"
+import { mapGetters, mapActions } from "vuex"
 
 export default {
   computed: {
@@ -78,6 +43,20 @@ export default {
       authenticated: "auth/authenticated",
       user: "auth/user"
     })
+  },
+
+  methods: {
+    ...mapActions({
+      signOutAction: "auth/signOut"
+    }),
+
+    signOut() {
+      this.signOutAction().then(() => {
+        this.$router.replace({
+          name: "Home"
+        })
+      })
+    }
   }
 }
 </script>

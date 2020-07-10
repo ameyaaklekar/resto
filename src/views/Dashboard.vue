@@ -28,7 +28,6 @@ export default {
             name: "SignIn"
           })
         }
-        
       })
       .catch(() => {
         console.log("Failed to get user")

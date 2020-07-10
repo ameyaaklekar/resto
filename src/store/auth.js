@@ -37,6 +37,13 @@ export default {
       }
     },
 
+    async signOut({ commit }) {
+      await axios.post("logout")
+      commit("SET_AUTHENTICATION", null)
+      commit("SET_USER", null)
+      localStorage.removeItem("auth")
+    },
+
     async getUser({ commit }) {
       try {
         let response = await axios.get("api/user")
