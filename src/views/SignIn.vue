@@ -5,11 +5,22 @@
         <form @submit.prevent="submit">
           <div class="form-group">
             <label for="email">Email address</label>
-            <input type="email" class="form-control" id="email" aria-describedby="emailHelp" v-model="form.email">
+            <input
+              type="email"
+              class="form-control"
+              id="email"
+              aria-describedby="emailHelp"
+              v-model="form.email"
+            />
           </div>
           <div class="form-group">
             <label for="password">Password</label>
-            <input type="password" class="form-control" id="password" v-model="form.password">
+            <input
+              type="password"
+              class="form-control"
+              id="password"
+              v-model="form.password"
+            />
           </div>
           <button type="submit" class="btn btn-primary">Sign In</button>
         </form>
@@ -19,7 +30,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions } from "vuex"
 
 export default {
   name: "signin",
@@ -27,23 +38,31 @@ export default {
     //
   },
 
-  data () {
+  data() {
     return {
       form: {
-        email: '', //ameya@gmail.com
-        password: '',
+        email: "", //ameya@gmail.com
+        password: ""
       }
     }
   },
 
   methods: {
     ...mapActions({
-      signIn: 'auth/signIn'
+      signIn: "auth/signIn"
     }),
 
     submit() {
       this.signIn(this.form)
+        .then(() => {
+          this.$router.replace({
+            name: "Dashboard"
+          })
+        })
+        .catch(() => {
+          console.log("Failed")
+        })
     }
   }
-};
+}
 </script>

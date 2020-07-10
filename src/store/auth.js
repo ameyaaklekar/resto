@@ -4,27 +4,48 @@ export default {
   namespaced: true,
 
   state: {
+    authenticated: null,
     user: null
   },
+  getters: {
+    authenticated(state) {
+      return state.authenticated
+    },
+
+    user(state) {
+      return state.user
+    }
+  },
   mutations: {
+    SET_AUTHENTICATION(state, data) {
+      state.authenticated = data
+    },
     SET_USER(state, data) {
       state.user = data
     }
   },
   actions: {
-    async signIn({ dispatch }, credentials) {
+    async signIn({ commit }, credentials) {
       await axios.get("sanctum/csrf-cookie")
 
-      await axios.post("login", credentials)
-
-      let response = await axios.get("api/user")
-
-      dispatch('attempt', response.data)
+      try {
+        await axios.post("login", credentials)
+        commit("SET_AUTHENTICATION", true)
+        localStorage.setItem("auth", true)
+      } catch (e) {
+        commit("SET_AUTHENTICATION", null)
+      }
     },
 
-    async attempt({ commit }, data) {
-      console.log(data)
-      commit('SET_USER', data);
+    async getUser({ commit }) {
+      try {
+        let response = await axios.get("api/user")
+        commit("SET_AUTHENTICATION", true)
+        commit("SET_USER", response.data)
+      } catch (e) {
+        commit("SET_AUTHENTICATION", null)
+        commit("SET_USER", null)
+      }
     }
-  },
-};
+  }
+}
