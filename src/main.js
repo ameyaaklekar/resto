@@ -1,8 +1,19 @@
 import Vue from "vue"
+import { BootstrapVue, IconsPlugin } from "bootstrap-vue"
+// This imports the dropdown and table plugins
+import { DropdownPlugin } from "bootstrap-vue"
 import App from "./App.vue"
 import router from "./router"
 import store from "./store"
 import axios from "axios"
+
+axios.defaults.baseURL = "http://localhost:8000"
+
+import "./assets/scss/main.scss"
+
+Vue.use(BootstrapVue)
+Vue.use(IconsPlugin)
+Vue.use(DropdownPlugin)
 
 axios.defaults.withCredentials = true
 
