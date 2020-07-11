@@ -18,10 +18,10 @@
 
       <!-- Right aligned nav items -->
       <b-navbar-nav class="ml-auto" v-if="user && authenticated">
-        <b-nav-item-dropdown right>
+        <b-nav-item-dropdown right class="profile-dropdown">
           <!-- Using 'button-content' slot -->
           <template v-slot:button-content>
-            <em>{{ user.name }}</em>
+            <b-avatar variant="info" class="profile-dropdown__img"></b-avatar> {{ user.name }}
           </template>
           <b-dropdown-item :to="{ name: 'Profile' }">Profile</b-dropdown-item>
           <b-dropdown-item href="#" @click.prevent="signOut">Sign Out</b-dropdown-item>
