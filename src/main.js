@@ -6,7 +6,11 @@ import router from "./router"
 import store from "./store"
 import axios from "axios"
 
-axios.defaults.baseURL = "http://localhost:8000"
+if (process.env.VUE_APP_PRODUCTION_MODE) {
+  axios.defaults.baseURL = process.env.VUE_APP_LIVE_API
+} else {
+  axios.defaults.baseURL = "http://localhost:8000"
+}
 
 import "./assets/scss/main.scss"
 
