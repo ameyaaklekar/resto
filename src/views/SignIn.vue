@@ -3,30 +3,33 @@
     <div class="container">
       <div class="row justify-content-md-center">
         <div class="col-md-4">
-          <form @submit.prevent="submit">
-            <div class="form-group">
-              <label for="email">Email address</label>
-              <input
+          <h1 class="text-center">Sign In</h1>
+          <b-form @submit.prevent="submit">
+            <b-form-group id="email" label="Email" label-for="email">
+              <b-form-input
                 type="email"
-                class="form-control"
                 id="email"
                 aria-describedby="emailHelp"
                 v-model="form.email"
-              />
-            </div>
-            <div class="form-group">
-              <label for="password">Password</label>
-              <input
+                required
+                placeholder="Email"
+              ></b-form-input>
+            </b-form-group>
+
+            <b-form-group id="password" label="Password" label-for="password">
+              <b-form-input
                 type="password"
-                class="form-control"
                 id="password"
                 v-model="form.password"
-              />
-            </div>
-            <button type="submit" class="btn btn-primary btn-lg btn-block">
-              Sign In
-            </button>
-          </form>
+                required
+                placeholder="Password"
+              ></b-form-input>
+              <b-form-invalid-feedback v-if="errors.email">
+                {{ errors.email[0] }}
+              </b-form-invalid-feedback>
+            </b-form-group>
+            <b-button type="submit" block variant="primary">Sign In</b-button>
+          </b-form>
         </div>
       </div>
     </div>
@@ -47,7 +50,8 @@ export default {
       form: {
         email: "", //ameya@gmail.com
         password: ""
-      }
+      },
+      errors: []
     }
   },
 
@@ -57,15 +61,15 @@ export default {
     }),
 
     submit() {
-      this.signIn(this.form)
-        .then(() => {
+      this.signIn(this.form).then(response => {
+        if (!response.errors) {
           this.$router.replace({
             name: "Dashboard"
           })
-        })
-        .catch(() => {
-          console.log("Failed")
-        })
+        } else {
+          this.errors = response.errors
+        }
+      })
     }
   }
 }
