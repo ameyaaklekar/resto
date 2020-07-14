@@ -11,9 +11,12 @@
                 id="email"
                 aria-describedby="emailHelp"
                 v-model="form.email"
-                required
                 placeholder="Email"
+                required
               ></b-form-input>
+              <b-form-invalid-feedback :state="validate">
+                {{ errors.email }}
+              </b-form-invalid-feedback>
             </b-form-group>
 
             <b-form-group id="password" label="Password" label-for="password">
@@ -21,11 +24,11 @@
                 type="password"
                 id="password"
                 v-model="form.password"
-                required
                 placeholder="Password"
+                required
               ></b-form-input>
-              <b-form-invalid-feedback v-if="errors.email">
-                {{ errors.email[0] }}
+              <b-form-invalid-feedback :state="validate">
+                {{ errors.password }}
               </b-form-invalid-feedback>
             </b-form-group>
             <b-button type="submit" block variant="primary">Sign In</b-button>
@@ -52,6 +55,12 @@ export default {
         password: ""
       },
       errors: []
+    }
+  },
+
+  computed: {
+    validate() {
+      return this.errors.length > 0
     }
   },
 

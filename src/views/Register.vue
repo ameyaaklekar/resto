@@ -17,8 +17,8 @@
                 required
                 placeholder="Company Name"
               ></b-form-input>
-              <b-form-invalid-feedback v-if="errors.companyName">
-                {{ errors.companyName[0] }}
+              <b-form-invalid-feedback :state="validate">
+                {{ errors.companyName }}
               </b-form-invalid-feedback>
             </b-form-group>
 
@@ -34,8 +34,8 @@
                 required
                 placeholder="First Name"
               ></b-form-input>
-              <b-form-invalid-feedback v-if="errors.firstName">
-                {{ errors.firstName[0] }}
+              <b-form-invalid-feedback :state="validate">
+                {{ errors.firstName }}
               </b-form-invalid-feedback>
             </b-form-group>
 
@@ -47,8 +47,8 @@
                 required
                 placeholder="First Name"
               ></b-form-input>
-              <b-form-invalid-feedback v-if="errors.lastName">
-                {{ errors.lastName[0] }}
+              <b-form-invalid-feedback :state="validate">
+                {{ errors.lastName }}
               </b-form-invalid-feedback>
             </b-form-group>
 
@@ -66,9 +66,6 @@
                   placeholder="Code"
                   class="col-md-2"
                 ></b-form-input>
-                <b-form-invalid-feedback v-if="errors.countryCode">
-                  {{ errors.countryCode[0] }}
-                </b-form-invalid-feedback>
 
                 <b-form-input
                   id="phoneNumber"
@@ -77,8 +74,9 @@
                   required
                   placeholder="Phone Number"
                 ></b-form-input>
-                <b-form-invalid-feedback v-if="errors.phoneNumber">
-                  {{ errors.phoneNumber[0] }}
+                <b-form-invalid-feedback :state="validate">
+                  {{ errors.countryCode }}
+                  {{ errors.phoneNumber }}
                 </b-form-invalid-feedback>
               </b-input-group>
             </b-form-group>
@@ -91,8 +89,8 @@
                 required
                 placeholder="Email"
               ></b-form-input>
-              <b-form-invalid-feedback v-if="errors.email">
-                {{ errors.email[0] }}
+              <b-form-invalid-feedback :state="validate">
+                {{ errors.email }}
               </b-form-invalid-feedback>
             </b-form-group>
 
@@ -104,8 +102,8 @@
                 required
                 placeholder="Password"
               ></b-form-input>
-              <b-form-invalid-feedback v-if="errors.password">
-                {{ errors.password[0] }}
+              <b-form-invalid-feedback :state="validate">
+                {{ errors.password }}
               </b-form-invalid-feedback>
             </b-form-group>
 
@@ -155,6 +153,12 @@ export default {
         password_confirmation: ""
       },
       errors: []
+    }
+  },
+
+  computed: {
+    validate() {
+      return this.errors.length > 0
     }
   },
 
