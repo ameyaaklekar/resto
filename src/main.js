@@ -5,12 +5,13 @@ import App from "./App.vue"
 import router from "./router"
 import store from "./store"
 import axios from "axios"
-
-if (process.env.VUE_APP_PRODUCTION_MODE) {
+console.log(process.env.VUE_APP_PRODUCTION_MODE)
+if (process.env.VUE_APP_PRODUCTION_MODE === true) {
   axios.defaults.baseURL = process.env.VUE_APP_LIVE_API
 } else {
   axios.defaults.baseURL = "http://localhost:8000"
 }
+console.log(axios.defaults.baseURL)
 
 import "./assets/scss/main.scss"
 
