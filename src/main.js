@@ -6,7 +6,7 @@ import router from "./router"
 import store from "./store"
 import axios from "axios"
 console.log(process.env.VUE_APP_PRODUCTION_MODE)
-if (process.env.VUE_APP_PRODUCTION_MODE === true) {
+if (process.env.VUE_APP_PRODUCTION_MODE === "true") {
   axios.defaults.baseURL = process.env.VUE_APP_LIVE_API
 } else {
   axios.defaults.baseURL = "http://localhost:8000"
