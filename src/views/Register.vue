@@ -18,7 +18,7 @@
                 placeholder="Company Name"
               ></b-form-input>
               <b-form-invalid-feedback :state="validate">
-                {{ errors.companyName }}
+                {{ errors["company.name"] }}
               </b-form-invalid-feedback>
             </b-form-group>
 
