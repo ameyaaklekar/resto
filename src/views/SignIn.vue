@@ -13,6 +13,7 @@
                 v-model="form.email"
                 placeholder="Email"
                 required
+                class="rounded-0"
               ></b-form-input>
               <b-form-invalid-feedback :state="validate">
                 {{ errors.email }}
@@ -26,12 +27,13 @@
                 v-model="form.password"
                 placeholder="Password"
                 required
+                class="rounded-0"
               ></b-form-input>
               <b-form-invalid-feedback :state="validate">
                 {{ errors.password }}
               </b-form-invalid-feedback>
             </b-form-group>
-            <b-button type="submit" block variant="primary">Sign In</b-button>
+            <b-button type="submit" block variant="primary" squared>Sign In</b-button>
           </b-form>
         </div>
       </div>
