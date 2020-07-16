@@ -3,7 +3,7 @@
     <Header/>
     <hr>
     <b-container>
-      <b-row no-gutters>
+      <b-row>
         <PreferencesNav/>
         <b-col md="9">
           <router-view/>
@@ -18,7 +18,7 @@ import Header from "@/components/Preferences/Header"
 import PreferencesNav from "@/components/Preferences/Navigation"
 
 export default {
-  name: "profile",
+  name: "preferences",
   components: {
     Header,
     PreferencesNav

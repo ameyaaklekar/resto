@@ -25,13 +25,14 @@ export default {
     }
   },
   actions: {
-    async signIn({ commit }, credentials) {
+    async signIn({ commit, dispatch }, credentials) {
       await axios.get("sanctum/csrf-cookie")
 
       try {
         let response = await axios.post("login", credentials)
-        commit("SET_AUTHENTICATION", true)
-        localStorage.setItem("auth", true)
+        if (!response.errors) {
+          await dispatch("getUser")
+        }
         return response
       } catch (e) {
         commit("SET_AUTHENTICATION", null)

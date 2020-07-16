@@ -17,7 +17,7 @@
       </template>
 
       <!-- Right aligned nav items -->
-      <b-navbar-nav class="ml-auto" v-if="user && authenticated">
+      <b-navbar-nav class="ml-auto" v-if="authenticated">
         <b-nav-item-dropdown right class="profile-dropdown">
           <!-- Using 'button-content' slot -->
           <template v-slot:button-content>
