@@ -1,15 +1,15 @@
 <template>
-  <div>
-    Profile
-  </div>
+  <section class="section">
+    Create User
+  </section>
 </template>
 
 <script>
 
 export default {
-  name: "profile",
+  name: "createUser",
   components: {
     //
   }
-};
+}
 </script>

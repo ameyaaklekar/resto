@@ -5,25 +5,42 @@ import App from "./App.vue"
 import router from "./router"
 import store from "./store"
 import axios from "axios"
-console.log(process.env.VUE_APP_PRODUCTION_MODE)
+import permissionConstants from "./constants/permissions"
+
 if (process.env.VUE_APP_PRODUCTION_MODE === "true") {
   axios.defaults.baseURL = process.env.VUE_APP_LIVE_API
 } else {
   axios.defaults.baseURL = "http://localhost:8000"
 }
-console.log(axios.defaults.baseURL)
 
 import "./assets/scss/main.scss"
 
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
+Vue.use(permissionConstants)
 
 axios.defaults.withCredentials = true
 
 Vue.config.productionTip = false
 
-new Vue({
-  router,
-  store,
-  render: h => h(App)
-}).$mount("#app")
+Vue.mixin({
+  methods: {
+    checkPermissions(user, permission) {
+      if (user.permissions.length > 0) {
+        var hasPermisisons = user.permissions.filter(function(el) {
+          return el.name == permission
+        })
+
+        return hasPermisisons.length > 0 ? true : false
+      }
+    }
+  }
+})
+
+store.dispatch("auth/getUser").then(() => {
+  new Vue({
+    router,
+    store,
+    render: h => h(App)
+  }).$mount("#app")
+})

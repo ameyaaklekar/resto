@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex"
+import { mapGetters } from "vuex"
 
 export default {
   name: "dashboard",
@@ -15,23 +15,11 @@ export default {
   },
 
   methods: {
-    ...mapActions({
-      getUser: "auth/getUser"
-    })
+    //
   },
 
   mounted() {
-    this.getUser()
-      .then(() => {
-        if (!this.user) {
-          this.$router.replace({
-            name: "SignIn"
-          })
-        }
-      })
-      .catch(() => {
-        console.log("Failed to get user")
-      })
+    //
   },
 
   computed: {

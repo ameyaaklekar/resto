@@ -1,10 +1,15 @@
 import Vue from "vue"
 import VueRouter from "vue-router"
+import store from "@/store"
 import Home from "../views/Home.vue"
 import Register from "../views/Register.vue"
 import SignIn from "../views/SignIn.vue"
 import Dashboard from "../views/Dashboard.vue"
-import Profile from "../views/Profile.vue"
+import Preferences from "../views/Preferences/Preferences.vue"
+import Profile from "../views/Preferences/Profile.vue"
+import CompanyProfile from "../views/Preferences/CompanyProfile.vue"
+import CreateUser from "../views/Preferences/CreateUser.vue"
+import AllUser from "../views/Preferences/AllUser.vue"
 
 Vue.use(VueRouter)
 
@@ -33,16 +38,43 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
-    path: "/profile",
-    name: "Profile",
-    component: Profile,
-    meta: { requiresAuth: true }
+    path: "/preferences",
+    name: "Preferences",
+    component: Preferences,
+    meta: { requiresAuth: true },
+    children: [
+      {
+        path: "profile",
+        name: "Profile",
+        component: Profile,
+        meta: { requiresAuth: true }
+      },
+      {
+        path: "company-profile",
+        name: "CompanyProfile",
+        component: CompanyProfile,
+        meta: { requiresAuth: true }
+      },
+      {
+        path: "create-user",
+        name: "CreateUser",
+        component: CreateUser,
+        meta: { requiresAuth: true }
+      },
+      {
+        path: "users",
+        name: "Users",
+        component: AllUser,
+        meta: { requiresAuth: true }
+      }
+    ]
   }
 ]
 
 const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
+  linkExactActiveClass: "active",
   routes
 })
 
@@ -50,7 +82,7 @@ router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
     // this route requires auth, check if logged in
     // if not, redirect to login page.
-    if (!localStorage.getItem("auth")) {
+    if (!store.getters["auth/authenticated"]) {
       next({
         path: "/sign-in",
         query: { redirect: to.fullPath }
@@ -61,7 +93,7 @@ router.beforeEach((to, from, next) => {
   } else if (to.matched.some(record => record.meta.guestOnly)) {
     // this route requires auth, check if logged in
     // if not, redirect to login page.
-    if (localStorage.getItem("auth")) {
+    if (store.getters["auth/authenticated"]) {
       next({
         path: "/dashboard",
         query: { redirect: to.fullPath }
