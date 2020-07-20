@@ -73,6 +73,20 @@ export default {
           return e.response.data
         }
       }
+    },
+
+    async updateUser({ commit }, data) {
+      try {
+        let response = await axios.put("api/user/update", data)
+        if (!response.errors) {
+          commit("SET_USER", response.data)
+        }
+        return response
+      } catch (e) {
+        if (e.response.data.errors) {
+          return e.response.data
+        }
+      }
     }
   }
 }
