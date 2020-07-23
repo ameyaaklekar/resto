@@ -120,7 +120,18 @@
                 placeholder="Confirm Password"
               ></b-form-input>
             </b-form-group>
-
+            <b-form-group id="recaptcha">
+              <vue-recaptcha
+                ref="recaptcha"
+                @verify="onVerify"
+                sitekey="6LfreLQZAAAAAI7rloxhlVtP5j3fN_vKaP76ymSQ"
+                :loadRecaptchaScript="true"
+              >
+              </vue-recaptcha>
+              <b-form-invalid-feedback :state="validate">
+                {{ errors.recaptcha }}
+              </b-form-invalid-feedback>
+            </b-form-group>
             <b-button type="submit" block variant="primary">Register</b-button>
           </b-form>
         </div>
@@ -131,11 +142,12 @@
 
 <script>
 import { mapActions } from "vuex"
+import VueRecaptcha from "vue-recaptcha"
 
 export default {
   name: "register",
   components: {
-    //
+    VueRecaptcha
   },
 
   data() {
@@ -150,7 +162,8 @@ export default {
         phoneNumber: "",
         email: "", //ameya@gmail.com
         password: "",
-        password_confirmation: ""
+        password_confirmation: "",
+        robot: false
       },
       errors: []
     }
@@ -164,19 +177,32 @@ export default {
 
   methods: {
     ...mapActions({
-      register: "auth/register"
+      register: "auth/register",
+      getUser: "auth/getUser"
     }),
 
     submit() {
-      this.register(this.form).then(response => {
-        if (!response.errors) {
-          this.$router.replace({
-            name: "Dashboard"
-          })
-        } else {
-          this.errors = response.errors
+      if (this.form.robot) {
+        this.register(this.form).then(response => {
+          if (!response.errors) {
+            this.getUser().then(() => {
+              this.$router.replace({
+                name: "Dashboard"
+              })
+            })
+          } else {
+            this.errors = response.errors
+          }
+        })
+      } else {
+        this.errors = {
+          recaptcha: "Please verify the recaptcha"
         }
-      })
+      }
+    },
+
+    onVerify(response) {
+      if (response) this.form.robot = response
     }
   }
 }
