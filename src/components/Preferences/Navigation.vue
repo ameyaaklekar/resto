@@ -5,7 +5,9 @@
       <b-list-group-item :to="{ name: 'CompanyProfile' }"
         >Company Details</b-list-group-item
       >
-      <b-list-group-item :to="{ name: 'CreateUser' }"
+      <b-list-group-item
+        :to="{ name: 'CreateUser' }"
+        v-if="checkPermissions(user, $getConst('ADD_EMPLOYEE'))"
         >Create Employee</b-list-group-item
       >
       <b-list-group-item :to="{ name: 'Users' }">Employees</b-list-group-item>
@@ -14,7 +16,14 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex"
+
 export default {
-  //
+  computed: {
+    ...mapGetters({
+      authenticated: "auth/authenticated",
+      user: "auth/user"
+    })
+  }
 }
 </script>
