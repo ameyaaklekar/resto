@@ -29,7 +29,7 @@ export default {
 
     async getRolePermission(_, data) {
       try {
-        let response = await axios.get("api/rolesPermission", {
+        let response = await axios.get("api/roles/permission", {
           params: {
             role: data
           }
