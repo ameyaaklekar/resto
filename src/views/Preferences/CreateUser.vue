@@ -109,7 +109,6 @@
                 id="address"
                 type="text"
                 v-model="form.address"
-                required
                 placeholder="Address"
               ></b-form-input>
               <b-form-invalid-feedback :state="validate">
@@ -124,7 +123,6 @@
                 id="city"
                 type="text"
                 v-model="form.city"
-                required
                 placeholder="City"
               ></b-form-input>
               <b-form-invalid-feedback :state="validate">
@@ -141,7 +139,6 @@
                 id="state"
                 type="text"
                 v-model="form.state"
-                required
                 placeholder="State"
               ></b-form-input>
               <b-form-invalid-feedback :state="validate">
@@ -156,7 +153,6 @@
                 id="country"
                 type="text"
                 v-model="form.country"
-                required
                 placeholder="Country"
               ></b-form-input>
               <b-form-invalid-feedback :state="validate">
@@ -176,7 +172,6 @@
                 id="postalCode"
                 type="text"
                 v-model="form.postalCode"
-                required
                 placeholder="Postal Address"
               ></b-form-input>
               <b-form-invalid-feedback :state="validate">
@@ -197,6 +192,7 @@
             <b-form-select
               v-model="form.role"
               :options="allRoles"
+              required
               @change="getPermissions($event)"
             ></b-form-select>
             <b-form-invalid-feedback :state="validate">
@@ -346,8 +342,8 @@ export default {
     },
 
     async submit() {
-      console.log(this.form)
-      // await axios.post("api/user/add-employee", this.form)
+      let response = await axios.post("api/employee/add", this.form)
+      console.log(response)
     }
   }
 }
