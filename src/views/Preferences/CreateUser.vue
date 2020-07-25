@@ -343,7 +343,6 @@ export default {
 
     async submit() {
       let response = await axios.post("api/employee/add", this.form)
-      console.log(response)
     }
   }
 }
