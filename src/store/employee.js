@@ -27,13 +27,9 @@ export default {
       }
     },
 
-    async getRolePermission(_, data) {
+    async getRolePermission() {
       try {
-        let response = await axios.get("api/roles/permission", {
-          params: {
-            role: data
-          }
-        })
+        let response = await axios.get("api/roles/permission")
 
         if (!response.error) {
           return response.data
