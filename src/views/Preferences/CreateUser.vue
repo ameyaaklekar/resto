@@ -342,7 +342,32 @@ export default {
     },
 
     async submit() {
-      let response = await axios.post("api/employee/add", this.form)
+      try {
+        let response = await axios.post("api/employee/add", this.form)
+        if (!response.errors) {
+          this.form.firstName = ""
+          this.form.lastName = ""
+          this.form.countryCode = ""
+          this.form.phoneNumber = ""
+          this.form.email = "" //ameya@gmail.com
+          this.form.address = ""
+          this.form.city = ""
+          this.form.state = ""
+          this.form.country = ""
+          this.form.postalCode = ""
+          this.form.companyId = ""
+          this.form.userId = ""
+          this.form.role = ""
+          this.form.permissions = []
+          this.permissions = []
+
+          this.success.dismissCountDown = this.success.dismissSecs
+        }
+      } catch (e) {
+        if (e.response.data.errors) {
+          this.errors = e.response.data.errors
+        }
+      }
     }
   }
 }
