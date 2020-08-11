@@ -26,7 +26,7 @@ Vue.config.productionTip = false
 Vue.mixin({
   methods: {
     checkPermissions(user, permission) {
-      if (user.permissions.length > 0) {
+      if (user && user.permissions.length > 0) {
         var hasPermisisons = user.permissions.filter(function(el) {
           return el.name == permission
         })

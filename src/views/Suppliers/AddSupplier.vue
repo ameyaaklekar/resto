@@ -1,7 +1,6 @@
 <template>
   <div class="preferences-content">
-    <h3 class="d-block d-sm-none">Profile</h3>
-    <template v-if="checkPermissions(user, $getConst('UPDATE_PROFILE'))">
+    <template>
       <b-alert
         :show="success.dismissCountDown"
         dismissible
@@ -9,52 +8,27 @@
         variant="success"
         @dismiss-count-down="countDownChanged"
       >
-        Profile updated successfully
+        Supplier Added successfully
       </b-alert>
       <b-form @submit.prevent="submit">
         <b-row>
           <b-col md="6">
-            <b-form-group
-              id="firstName"
-              label="First Name"
-              label-for="firstName"
-            >
+            <b-form-group id="name" label="Name" label-for="name">
               <b-form-input
-                id="firstName"
+                id="name"
                 type="text"
-                v-model="form.firstName"
+                v-model="form.name"
                 required
                 placeholder="First Name"
               ></b-form-input>
               <b-form-invalid-feedback :state="validate">
-                {{ errors.firstName }}
+                {{ errors.name }}
               </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
 
           <b-col md="6">
-            <b-form-group id="lastName" label="Last Name" label-for="lastName">
-              <b-form-input
-                id="lastName"
-                type="text"
-                v-model="form.lastName"
-                required
-                placeholder="First Name"
-              ></b-form-input>
-              <b-form-invalid-feedback :state="validate">
-                {{ errors.lastName }}
-              </b-form-invalid-feedback>
-            </b-form-group>
-          </b-col>
-        </b-row>
-
-        <b-row>
-          <b-col md="6">
-            <b-form-group
-              id="phoneNumber"
-              label="Phone Number"
-              label-for="phoneNumber"
-            >
+            <b-form-group id="contact" label="Phone Number" label-for="contact">
               <b-input-group prepend="+" class="mb-2">
                 <b-form-input
                   id="countryCode"
@@ -66,20 +40,22 @@
                 ></b-form-input>
 
                 <b-form-input
-                  id="phoneNumber"
+                  id="contact"
                   type="tel"
-                  v-model="form.phoneNumber"
+                  v-model="form.contact"
                   required
                   placeholder="Phone Number"
                 ></b-form-input>
                 <b-form-invalid-feedback :state="validate">
                   {{ errors.countryCode }}
-                  {{ errors.phoneNumber }}
+                  {{ errors.contact }}
                 </b-form-invalid-feedback>
               </b-input-group>
             </b-form-group>
           </b-col>
+        </b-row>
 
+        <b-row>
           <b-col md="6">
             <b-form-group id="email" label="Email" label-for="email">
               <b-form-input
@@ -94,16 +70,13 @@
               </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
-        </b-row>
 
-        <b-row>
           <b-col md="6">
             <b-form-group id="address" label="Address" label-for="address">
               <b-form-input
                 id="address"
                 type="text"
                 v-model="form.address"
-                required
                 placeholder="Address"
               ></b-form-input>
               <b-form-invalid-feedback :state="validate">
@@ -111,14 +84,15 @@
               </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
+        </b-row>
 
+        <b-row>
           <b-col md="6">
             <b-form-group id="city" label="City" label-for="city">
               <b-form-input
                 id="city"
                 type="text"
                 v-model="form.city"
-                required
                 placeholder="City"
               ></b-form-input>
               <b-form-invalid-feedback :state="validate">
@@ -126,16 +100,12 @@
               </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
-        </b-row>
-
-        <b-row>
           <b-col md="6">
             <b-form-group id="state" label="State" label-for="state">
               <b-form-input
                 id="state"
                 type="text"
                 v-model="form.state"
-                required
                 placeholder="State"
               ></b-form-input>
               <b-form-invalid-feedback :state="validate">
@@ -143,14 +113,15 @@
               </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
+        </b-row>
 
+        <b-row>
           <b-col md="6">
             <b-form-group id="country" label="Country" label-for="country">
               <b-form-input
                 id="country"
                 type="text"
                 v-model="form.country"
-                required
                 placeholder="Country"
               ></b-form-input>
               <b-form-invalid-feedback :state="validate">
@@ -158,8 +129,6 @@
               </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
-        </b-row>
-        <b-row>
           <b-col md="6">
             <b-form-group
               id="postalCode"
@@ -170,7 +139,6 @@
                 id="postalCode"
                 type="text"
                 v-model="form.postalCode"
-                required
                 placeholder="Postal Address"
               ></b-form-input>
               <b-form-invalid-feedback :state="validate">
@@ -179,64 +147,26 @@
             </b-form-group>
           </b-col>
         </b-row>
-
-        <b-button type="submit" block variant="primary"
-          >Update Details</b-button
-        >
+        <b-row>
+          <b-col md="12">
+            <b-button type="submit" block variant="primary"
+              >Add Supplier</b-button
+            >
+          </b-col>
+        </b-row>
       </b-form>
-    </template>
-    <template v-else-if="user">
-      <p>
-        <strong>
-          *Note: Please contact your manager to update your details
-        </strong>
-      </p>
-      <p><strong>Name:</strong> {{ user.first_name }} {{ user.last_name }}</p>
-      <p>
-        <strong>Phone Number:</strong> +{{ user.country_code }}
-        {{ user.phone_number }}
-      </p>
-      <p><strong>Email:</strong> {{ user.email }}</p>
-      <p><strong>Address:</strong> {{ user.address }}</p>
-      <p><strong>City:</strong> {{ user.city }}</p>
-      <p><strong>State:</strong> {{ user.state }}</p>
-      <p><strong>Country:</strong> {{ user.country }}</p>
-      <p><strong>Postal Code:</strong> {{ user.postal_code }}</p>
     </template>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex"
+import { mapGetters } from "vuex"
+import axios from "axios"
 
 export default {
-  name: "profile",
+  name: "addSupplier",
   components: {
     //
-  },
-
-  data() {
-    return {
-      form: {
-        firstName: "",
-        lastName: "",
-        countryCode: "",
-        phoneNumber: "",
-        email: "", //ameya@gmail.com
-        address: "",
-        city: "",
-        state: "",
-        country: "",
-        postalCode: "",
-        companyId: "",
-        userId: ""
-      },
-      success: {
-        dismissSecs: 5,
-        dismissCountDown: 0
-      },
-      errors: []
-    }
   },
 
   created() {
@@ -249,45 +179,71 @@ export default {
     },
 
     ...mapGetters({
-      user: "auth/user"
+      authenticated: "auth/authenticated",
+      user: "auth/user",
+      roles: "employee/allRoles"
     })
+  },
+
+  data() {
+    return {
+      form: {
+        name: "",
+        countryCode: "",
+        contact: "",
+        email: "", //ameya@gmail.com
+        address: "",
+        city: "",
+        state: "",
+        country: "",
+        postalCode: "",
+        companyId: "",
+      },
+      success: {
+        dismissSecs: 5,
+        dismissCountDown: 0
+      },
+      errors: []
+    }
   },
 
   methods: {
     setData() {
-      if (this.user) {
-        this.form.firstName = this.user.first_name
-        this.form.lastName = this.user.last_name
-        this.form.countryCode = this.user.country_code
-        this.form.phoneNumber = this.user.phone_number
-        this.form.email = this.user.email
-        this.form.address = this.user.address
-        this.form.city = this.user.city
-        this.form.state = this.user.state
-        this.form.country = this.user.country
-        this.form.postalCode = this.user.postal_code
-        this.form.companyId = this.user.company_id
-        this.form.userId = this.user.id
-      }
-    },
-
-    ...mapActions({
-      updateUser: "auth/updateUser"
-    }),
-
-    submit() {
-      this.updateUser(this.form).then(response => {
-        if (!response.errors) {
-          this.success.dismissCountDown = this.success.dismissSecs
-        } else {
-          this.errors = response.errors
-        }
-      })
+      this.form.companyId = this.user.company_id
     },
 
     countDownChanged(dismissCountDown) {
       this.success.dismissCountDown = dismissCountDown
+    },
+
+    async submit() {
+      try {
+        let response = await axios.post("api/suppliers/add", this.form)
+        if (!response.errors) {
+          this.form.name = ""
+          this.form.countryCode = ""
+          this.form.contact = ""
+          this.form.email = "" //ameya@gmail.com
+          this.form.address = ""
+          this.form.city = ""
+          this.form.state = ""
+          this.form.country = ""
+          this.form.postalCode = ""
+          this.form.companyId = ""
+          this.errors = []
+
+          this.success.dismissCountDown = this.success.dismissSecs
+        }
+      } catch (e) {
+        if (e.response.data.errors) {
+          this.errors = e.response.data.errors
+        }
+      }
     }
+  },
+
+  mounted() {
+    //
   }
 }
 </script>

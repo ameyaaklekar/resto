@@ -73,10 +73,15 @@ export default {
 
     submit() {
       this.signIn(this.form).then(response => {
+        console.log()
         if (!response.errors) {
-          this.$router.replace({
-            name: "Dashboard"
-          })
+          if (this.$route.query.redirect) {
+            this.$router.push(this.$route.query.redirect)
+          } else {
+            this.$router.push({
+              name: "Dashboard"
+            })
+          }
         } else {
           this.errors = response.errors
         }

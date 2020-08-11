@@ -2,11 +2,11 @@
   <section class="section">
     <b-container fluid>
       <b-row>
-        <PreferencesNav/>
+        <SupplierNav />
         <b-col md="9" lg="10">
           <Header/>
           <hr>
-          <router-view/>
+          <router-view />
         </b-col>
       </b-row>
     </b-container>
@@ -15,13 +15,25 @@
 
 <script>
 import Header from "@/components/Header"
-import PreferencesNav from "@/components/Preferences/Navigation"
+import SupplierNav from "@/components/Suppliers/Navigation"
 
 export default {
-  name: "preferences",
+  name: "suppliers",
   components: {
     Header,
-    PreferencesNav
+    SupplierNav
+  },
+
+  methods: {
+    //
+  },
+
+  mounted() {
+    //
+  },
+
+  computed: {
+    //
   }
 }
 </script>

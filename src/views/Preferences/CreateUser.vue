@@ -1,13 +1,6 @@
 <template>
   <div class="preferences-content">
-    <h3 class="d-block d-sm-none">Create Employee</h3>
     <template v-if="checkPermissions(user, $getConst('ADD_EMPLOYEE'))">
-      <b-row>
-        <b-col>
-          <h5>Employee Details</h5>
-          <hr>
-        </b-col>
-      </b-row>
       <b-alert
         :show="success.dismissCountDown"
         dismissible
@@ -264,7 +257,6 @@ export default {
         country: "",
         postalCode: "",
         companyId: "",
-        userId: "",
         role: "",
         permissions: []
       },
@@ -356,10 +348,10 @@ export default {
           this.form.country = ""
           this.form.postalCode = ""
           this.form.companyId = ""
-          this.form.userId = ""
           this.form.role = ""
           this.form.permissions = []
           this.permissions = []
+          this.errors = []
 
           this.success.dismissCountDown = this.success.dismissSecs
         }
