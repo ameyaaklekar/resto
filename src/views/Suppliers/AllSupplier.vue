@@ -1,6 +1,6 @@
 <template>
   <div class="preferences-content">
-    <template v-if="suppliers">
+    <template v-if="suppliers.length > 0">
       <b-list-group>
         <b-list-group-item
           href="#"
@@ -25,7 +25,7 @@
         </b-list-group-item>
       </b-list-group>
     </template>
-    <h1 v-else>No Suppliers Added!</h1>
+    <b-alert v-else variant="danger" show>No Suppliers Added!</b-alert>
   </div>
 </template>
 
