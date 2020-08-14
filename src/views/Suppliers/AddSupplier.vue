@@ -10,10 +10,13 @@
       >
         Supplier Added successfully
       </b-alert>
+      <b-alert v-model="permissionError.show" fade variant="danger">
+        {{ errors.permission }}
+      </b-alert>
       <b-form @submit.prevent="submit">
         <b-row>
           <b-col md="6">
-            <b-form-group id="name" label="Name" label-for="name">
+            <b-form-group label="Name" label-for="name">
               <b-form-input
                 id="name"
                 type="text"
@@ -27,6 +30,22 @@
             </b-form-group>
           </b-col>
 
+          <b-col md="6">
+            <b-form-group label="Contact Person" label-for="contactPerson">
+              <b-form-input
+                id="contactPerson"
+                type="text"
+                v-model="form.contactPerson"
+                placeholder="Contact Person"
+              ></b-form-input>
+              <b-form-invalid-feedback :state="validate">
+                {{ errors.contactPerson }}
+              </b-form-invalid-feedback>
+            </b-form-group>
+          </b-col>
+        </b-row>
+
+        <b-row>
           <b-col md="6">
             <b-form-group id="contact" label="Phone Number" label-for="contact">
               <b-input-group prepend="+" class="mb-2">
@@ -53,9 +72,7 @@
               </b-input-group>
             </b-form-group>
           </b-col>
-        </b-row>
 
-        <b-row>
           <b-col md="6">
             <b-form-group id="email" label="Email" label-for="email">
               <b-form-input
@@ -70,7 +87,9 @@
               </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
+        </b-row>
 
+        <b-row>
           <b-col md="6">
             <b-form-group id="address" label="Address" label-for="address">
               <b-form-input
@@ -84,9 +103,7 @@
               </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
-        </b-row>
 
-        <b-row>
           <b-col md="6">
             <b-form-group id="city" label="City" label-for="city">
               <b-form-input
@@ -100,6 +117,9 @@
               </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
+        </b-row>
+
+        <b-row>
           <b-col md="6">
             <b-form-group id="state" label="State" label-for="state">
               <b-form-input
@@ -113,9 +133,7 @@
               </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
-        </b-row>
 
-        <b-row>
           <b-col md="6">
             <b-form-group id="country" label="Country" label-for="country">
               <b-form-input
@@ -129,6 +147,9 @@
               </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
+        </b-row>
+
+        <b-row>
           <b-col md="6">
             <b-form-group
               id="postalCode"
@@ -198,10 +219,14 @@ export default {
         country: "",
         postalCode: "",
         companyId: "",
+        contactPerson: ""
       },
       success: {
         dismissSecs: 5,
         dismissCountDown: 0
+      },
+      permissionError: {
+        show: false
       },
       errors: []
     }
@@ -214,6 +239,7 @@ export default {
 
     countDownChanged(dismissCountDown) {
       this.success.dismissCountDown = dismissCountDown
+      this.permissionError.dismissCountDown = dismissCountDown
     },
 
     async submit() {
@@ -230,13 +256,19 @@ export default {
           this.form.country = ""
           this.form.postalCode = ""
           this.form.companyId = ""
+          this.form.contactPerson = ""
           this.errors = []
 
           this.success.dismissCountDown = this.success.dismissSecs
+          this.permissionError.show = false
         }
       } catch (e) {
         if (e.response.data.errors) {
           this.errors = e.response.data.errors
+
+          if (this.errors.permission.length > 0) {
+            this.permissionError.show = true
+          }
         }
       }
     }

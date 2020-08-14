@@ -1,29 +1,49 @@
 <template>
   <div class="preferences-content">
+    <b-alert
+      :show="success.dismissCountDown"
+      dismissible
+      fade
+      variant="success"
+      @dismiss-count-down="countDownChanged"
+    >
+      Supplier's status changed successfully
+    </b-alert>
+    <b-alert v-model="permissionError.show" fade variant="danger">
+      {{ errors.permission }}
+    </b-alert>
     <template v-if="suppliers.length > 0">
-      <b-list-group>
-        <b-list-group-item
-          href="#"
-          class="flex-column align-items-start"
-          v-for="supplier in suppliers"
-          :key="supplier.id"
-        >
-          <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1">{{ supplier.name }}</h5>
-            <b-form-checkbox
-              switch
-              size="lg"
-              :checked="supplier.status == 'A'"
-            ></b-form-checkbox>
-          </div>
-          <p class="mb-1">{{ supplier.contact_person }}</p>
-
-          <small
-            >{{ supplier.email }}, +{{ supplier.country_code }}
-            {{ supplier.contact }}</small
-          >
-        </b-list-group-item>
-      </b-list-group>
+      <div class="table-responsive">
+        <table class="table table-sm">
+          <thead class="thead-light">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Contact Person</th>
+              <th scope="col">Email</th>
+              <th scope="col">Contact</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="supplier in suppliers" :key="supplier.id">
+              <th scope="row">{{ supplier.id }}</th>
+              <td>{{ supplier.name }}</td>
+              <td>{{ supplier.contact_person }}</td>
+              <td>{{ supplier.email }}</td>
+              <td>+{{ supplier.country_code }} {{ supplier.contact }}</td>
+              <td>
+                <b-form-checkbox
+                  switch
+                  size="lg"
+                  :checked="supplier.status == 'A'"
+                  @change="updateStatus($event, supplier.id)"
+                ></b-form-checkbox>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </template>
     <b-alert v-else variant="danger" show>No Suppliers Added!</b-alert>
   </div>
@@ -40,21 +60,12 @@ export default {
 
   data() {
     return {
-      form: {
-        name: "",
-        countryCode: "",
-        contact: "",
-        email: "", //ameya@gmail.com
-        address: "",
-        city: "",
-        state: "",
-        country: "",
-        postalCode: "",
-        companyId: "",
-      },
       success: {
         dismissSecs: 5,
         dismissCountDown: 0
+      },
+      permissionError: {
+        show: false
       },
       errors: [],
       suppliers: []
@@ -62,7 +73,7 @@ export default {
   },
 
   created() {
-    this.getCompanySuppliers(this.user.company_id).then(() => {
+    this.getCompanySuppliers().then(() => {
       this.setData()
     })
   },
@@ -72,8 +83,44 @@ export default {
       this.suppliers = this.companySuppliers
     },
 
+    countDownChanged(dismissCountDown) {
+      this.success.dismissCountDown = dismissCountDown
+    },
+
+    async updateStatus(event, supplierId) {
+      let data = []
+
+      if (event === true) {
+        data = {
+          companyId: this.user.company_id,
+          supplierId: supplierId,
+          status: "A"
+        }
+      } else {
+        data = {
+          companyId: this.user.company_id,
+          supplierId: supplierId,
+          status: "I"
+        }
+      }
+
+      let response = await this.updateSupplierStatus(data)
+
+      if (!response.errors) {
+        this.success.dismissCountDown = this.success.dismissSecs
+        this.permissionError.show = false
+      } else {
+        this.errors = response.errors
+
+        if (this.errors.permission.length > 0) {
+          this.permissionError.show = true
+        }
+      }
+    },
+
     ...mapActions({
-      getCompanySuppliers: "suppliers/getCompanySupplier"
+      getCompanySuppliers: "suppliers/getCompanySupplier",
+      updateSupplierStatus: "suppliers/updateSupplierStatus"
     })
   },
 
