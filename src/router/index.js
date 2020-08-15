@@ -10,6 +10,11 @@ import Profile from "../views/Preferences/Profile.vue"
 import CompanyProfile from "../views/Preferences/CompanyProfile.vue"
 import CreateUser from "../views/Preferences/CreateUser.vue"
 import AllUser from "../views/Preferences/AllUser.vue"
+import Suppliers from "../views/Suppliers/Suppliers.vue"
+import AddSupplier from "../views/Suppliers/AddSupplier.vue"
+import AllSupplier from "../views/Suppliers/AllSupplier.vue"
+import EditSupplier from "../views/Suppliers/EditSupplier.vue"
+import Stock from "../views/Stock.vue"
 
 Vue.use(VueRouter)
 
@@ -27,7 +32,7 @@ const routes = [
   },
   {
     path: "/sign-in",
-    name: "SignIn",
+    name: "Sign In",
     component: SignIn,
     meta: { guestOnly: true }
   },
@@ -35,6 +40,39 @@ const routes = [
     path: "/dashboard",
     name: "Dashboard",
     component: Dashboard,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: "/suppliers",
+    name: "Suppliers",
+    component: Suppliers,
+    meta: { requiresAuth: true },
+    children: [
+      {
+        path: "all",
+        name: "All Suppliers",
+        component: AllSupplier,
+        meta: { requiresAuth: true }
+      },
+      {
+        path: "add",
+        name: "Add Supplier",
+        component: AddSupplier,
+        meta: { requiresAuth: true }
+      },
+      {
+        path: "edit/:id",
+        name: "Edit Supplier",
+        props: route => ({ supplierId: route.params.id }),
+        component: EditSupplier,
+        meta: { requiresAuth: true }
+      }
+    ]
+  },
+  {
+    path: "/stock",
+    name: "Stock",
+    component: Stock,
     meta: { requiresAuth: true }
   },
   {
@@ -51,19 +89,19 @@ const routes = [
       },
       {
         path: "company-profile",
-        name: "CompanyProfile",
+        name: "Company Profile",
         component: CompanyProfile,
         meta: { requiresAuth: true }
       },
       {
-        path: "create-user",
-        name: "CreateUser",
+        path: "create-employee",
+        name: "Create Employee",
         component: CreateUser,
         meta: { requiresAuth: true }
       },
       {
-        path: "users",
-        name: "Users",
+        path: "employees",
+        name: "Employees",
         component: AllUser,
         meta: { requiresAuth: true }
       }

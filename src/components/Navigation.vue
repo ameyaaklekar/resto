@@ -9,6 +9,12 @@
         <b-navbar-nav>
           <b-nav-item :to="{ name: 'Dashboard' }">Dashboard</b-nav-item>
         </b-navbar-nav>
+        <b-navbar-nav>
+          <b-nav-item :to="{ name: 'Stock' }">Stock</b-nav-item>
+        </b-navbar-nav>
+        <b-navbar-nav v-if="checkPermissions(user, $getConst('VIEW_SUPPLIER'))">
+          <b-nav-item :to="{ name: 'Suppliers' }">Suppliers</b-nav-item>
+        </b-navbar-nav>
       </template>
       <template v-else>
         <b-navbar-nav>
@@ -40,7 +46,7 @@
       </b-navbar-nav>
       <div class="ml-auto" v-else>
         <b-link
-          :to="{ name: 'SignIn' }"
+          :to="{ name: 'Sign In' }"
           class="btn btn-outline-success rounded-0"
           >Sign In</b-link
         >

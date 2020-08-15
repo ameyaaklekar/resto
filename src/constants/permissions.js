@@ -17,7 +17,15 @@ const permissions = {
   VIEW_COMPANY: "viewCompany",
   UPDATE_COMPANY: "updateCompany",
   DELETE_COMPANY: "deleteCompany",
-  UPDATE_PROFILE: "updateProfile"
+  UPDATE_PROFILE: "updateProfile",
+  ADD_STOCK: "addStock",
+  VIEW_STOCK: "viewStock",
+  UPDATE_STOCK: "updateStock",
+  DELETE_STOCK: "deleteStock",
+  ADD_SUPPLIER: "addSupplier",
+  VIEW_SUPPLIER: "viewSupplier",
+  UPDATE_SUPPLIER: "updateSupplier",
+  DELETE_SUPPLIER: "deleteSupplier"
 }
 
 permissions.install = function(Vue) {
