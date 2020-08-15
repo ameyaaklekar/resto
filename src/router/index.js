@@ -13,6 +13,7 @@ import AllUser from "../views/Preferences/AllUser.vue"
 import Suppliers from "../views/Suppliers/Suppliers.vue"
 import AddSupplier from "../views/Suppliers/AddSupplier.vue"
 import AllSupplier from "../views/Suppliers/AllSupplier.vue"
+import EditSupplier from "../views/Suppliers/EditSupplier.vue"
 import Stock from "../views/Stock.vue"
 
 Vue.use(VueRouter)
@@ -57,6 +58,13 @@ const routes = [
         path: "add",
         name: "Add Supplier",
         component: AddSupplier,
+        meta: { requiresAuth: true }
+      },
+      {
+        path: "edit/:id",
+        name: "Edit Supplier",
+        props: route => ({ supplierId: route.params.id }),
+        component: EditSupplier,
         meta: { requiresAuth: true }
       }
     ]

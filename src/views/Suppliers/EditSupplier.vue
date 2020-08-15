@@ -1,6 +1,6 @@
 <template>
   <div class="preferences-content">
-    <template v-if="checkPermissions(user, $getConst('ADD_SUPPLIER'))">
+    <template>
       <b-alert
         :show="success.dismissCountDown"
         dismissible
@@ -8,7 +8,7 @@
         variant="success"
         @dismiss-count-down="countDownChanged"
       >
-        Supplier Added successfully
+        Supplier Updated successfully
       </b-alert>
       <b-alert v-model="permissionError.show" fade variant="danger">
         {{ errors.permission }}
@@ -23,6 +23,7 @@
                 v-model="form.name"
                 required
                 placeholder="First Name"
+                disabled
               ></b-form-input>
               <b-form-invalid-feedback :state="validate">
                 {{ errors.name }}
@@ -171,19 +172,18 @@
         <b-row>
           <b-col md="12">
             <b-button type="submit" block variant="primary"
-              >Add Supplier</b-button
+              >Update Supplier</b-button
             >
           </b-col>
         </b-row>
       </b-form>
     </template>
-    <b-alert v-else variant="danger" show>User is not Authorized!</b-alert>
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex"
-import axios from "axios"
+import { mapGetters, mapActions } from "vuex"
+// import axios from "axios"
 
 export default {
   name: "addSupplier",
@@ -191,8 +191,12 @@ export default {
     //
   },
 
+  props: ["supplierId"],
+
   created() {
-    this.setData()
+    this.getSupplier(this.supplierId).then(() => {
+      this.setData()
+    })
   },
 
   computed: {
@@ -203,7 +207,8 @@ export default {
     ...mapGetters({
       authenticated: "auth/authenticated",
       user: "auth/user",
-      roles: "employee/allRoles"
+      roles: "employee/allRoles",
+      supplier: "suppliers/getSupplier"
     })
   },
 
@@ -220,7 +225,8 @@ export default {
         country: "",
         postalCode: "",
         companyId: "",
-        contactPerson: ""
+        contactPerson: "",
+        supplierId: ""
       },
       success: {
         dismissSecs: 5,
@@ -234,8 +240,23 @@ export default {
   },
 
   methods: {
+    ...mapActions({
+      getSupplier: "suppliers/getSupplier",
+      updateSupplier: "suppliers/updateSupplier"
+    }),
+
     setData() {
-      this.form.companyId = this.user.company_id
+      this.form.name = this.supplier.name
+      this.form.countryCode = this.supplier.country_code
+      this.form.contact = this.supplier.contact
+      this.form.email = this.supplier.email
+      this.form.address = this.supplier.address
+      this.form.city = this.supplier.city
+      this.form.state = this.supplier.state
+      this.form.country = this.supplier.country
+      this.form.postalCode = this.supplier.postal_code
+      this.form.contactPerson = this.supplier.contact_person
+      this.form.supplierId = this.supplier.id
     },
 
     countDownChanged(dismissCountDown) {
@@ -245,24 +266,16 @@ export default {
 
     async submit() {
       try {
-        let response = await axios.post("api/suppliers/add", this.form)
-        if (!response.errors) {
-          this.form.name = ""
-          this.form.countryCode = ""
-          this.form.contact = ""
-          this.form.email = "" //ameya@gmail.com
-          this.form.address = ""
-          this.form.city = ""
-          this.form.state = ""
-          this.form.country = ""
-          this.form.postalCode = ""
-          this.form.companyId = ""
-          this.form.contactPerson = ""
-          this.errors = []
+        let response = this.updateSupplier(this.form).then(() => {
+          if (!response.errors) {
+            this.getSupplier(this.supplierId).then(() => {
+              this.setData()
 
-          this.success.dismissCountDown = this.success.dismissSecs
-          this.permissionError.show = false
-        }
+              this.success.dismissCountDown = this.success.dismissSecs
+              this.permissionError.show = false
+            })
+          }
+        })
       } catch (e) {
         if (e.response.data.errors) {
           this.errors = e.response.data.errors

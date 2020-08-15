@@ -12,7 +12,7 @@
         <b-navbar-nav>
           <b-nav-item :to="{ name: 'Stock' }">Stock</b-nav-item>
         </b-navbar-nav>
-        <b-navbar-nav>
+        <b-navbar-nav v-if="checkPermissions(user, $getConst('VIEW_SUPPLIER'))">
           <b-nav-item :to="{ name: 'Suppliers' }">Suppliers</b-nav-item>
         </b-navbar-nav>
       </template>

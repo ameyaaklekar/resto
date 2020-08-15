@@ -4,20 +4,29 @@ export default {
   namespaced: true,
 
   state: {
-    companySuppliers: null
+    companySuppliers: null,
+    supplier: null
   },
   getters: {
     companySuppliers(state) {
       return state.companySuppliers
+    },
+
+    getSupplier(state) {
+      return state.supplier
     }
   },
   mutations: {
     SET_SUPPLIERS(state, data) {
       state.companySuppliers = data
+    },
+
+    SET_SUPPLIER(state, data) {
+      state.supplier = data
     }
   },
   actions: {
-    async getCompanySupplier({ commit }) {
+    async getCompanySuppliers({ commit }) {
       try {
         let response = await axios.get("api/suppliers/all")
         commit("SET_SUPPLIERS", response.data)
@@ -36,6 +45,34 @@ export default {
         return response
       } catch (e) {
         return e.response.data
+      }
+    },
+
+    async getSupplier({ commit }, supplierId) {
+      try {
+        let response = await axios.get("api/suppliers/" + supplierId + "/edit")
+        if (!response.error) {
+          commit("SET_SUPPLIER", response.data)
+          return response.data
+        }
+      } catch (e) {
+        if (e.response.data.errors) {
+          commit("SET_SUPPLIER", null)
+          return e.response.data
+        }
+      }
+    },
+
+    async updateSupplier(_, data) {
+      try {
+        let response = await axios.put("api/suppliers/update", data)
+        if (!response.error) {
+          return response.data
+        }
+      } catch (e) {
+        if (e.response.data.errors) {
+          return e.response.data
+        }
       }
     }
   }

@@ -4,10 +4,14 @@
       <b-list-group-item :to="{ name: 'Suppliers' }"
         >Overview</b-list-group-item
       >
-      <b-list-group-item :to="{ name: 'All Suppliers' }"
+      <b-list-group-item
+        :to="{ name: 'All Suppliers' }"
+        v-if="checkPermissions(user, $getConst('VIEW_SUPPLIER'))"
         >All Suppliers</b-list-group-item
       >
-      <b-list-group-item :to="{ name: 'Add Supplier' }"
+      <b-list-group-item
+        :to="{ name: 'Add Supplier' }"
+        v-if="checkPermissions(user, $getConst('ADD_SUPPLIER'))"
         >Add Supplier</b-list-group-item
       >
     </b-list-group>
