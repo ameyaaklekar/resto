@@ -220,7 +220,7 @@ import { mapGetters, mapActions } from "vuex"
 import axios from "axios"
 
 export default {
-  name: "createUser",
+  name: "createEmployee",
   components: {
     //
   },

@@ -186,7 +186,7 @@ import { mapGetters, mapActions } from "vuex"
 // import axios from "axios"
 
 export default {
-  name: "addSupplier",
+  name: "editSupplier",
   components: {
     //
   },
