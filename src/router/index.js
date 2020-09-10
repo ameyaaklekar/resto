@@ -7,9 +7,10 @@ import SignIn from "../views/SignIn.vue"
 import Dashboard from "../views/Dashboard.vue"
 import Preferences from "../views/Preferences/Preferences.vue"
 import Profile from "../views/Preferences/Profile.vue"
+import EditEmployee from "../views/Preferences/EditEmployee.vue"
 import CompanyProfile from "../views/Preferences/CompanyProfile.vue"
-import CreateUser from "../views/Preferences/CreateUser.vue"
-import AllUser from "../views/Preferences/AllUser.vue"
+import CreateEmployee from "../views/Preferences/CreateEmployee.vue"
+import AllEmployees from "../views/Preferences/AllEmployees.vue"
 import Suppliers from "../views/Suppliers/Suppliers.vue"
 import AddSupplier from "../views/Suppliers/AddSupplier.vue"
 import AllSupplier from "../views/Suppliers/AllSupplier.vue"
@@ -96,14 +97,23 @@ const routes = [
       {
         path: "create-employee",
         name: "Create Employee",
-        component: CreateUser,
+        component: CreateEmployee,
         meta: { requiresAuth: true }
       },
       {
         path: "employees",
         name: "Employees",
-        component: AllUser,
-        meta: { requiresAuth: true }
+        component: AllEmployees,
+        meta: { requiresAuth: true },
+        children: [
+          {
+            path: "edit/:id",
+            name: "Edit Employee",
+            component: EditEmployee,
+            props: route => ({ employeeId: route.params.id }),
+            meta: { requiresAuth: true }
+          }
+        ]
       }
     ]
   }

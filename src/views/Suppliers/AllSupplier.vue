@@ -53,7 +53,7 @@
                   &nbsp;
                   <b-link
                     class="btn btn-sm btn-danger rounded-0"
-                    v-if="checkPermissions(user, $getConst('UPDATE_SUPPLIER'))"
+                    v-if="checkPermissions(user, $getConst('DELETE_SUPPLIER'))"
                     >Delete</b-link
                   >
                 </td>
