@@ -9,7 +9,7 @@
           variant="success"
           @dismiss-count-down="countDownChanged"
         >
-          Supplier's status changed successfully
+          Employees status changed successfully
         </b-alert>
         <b-alert v-model="permissionError.show" fade variant="danger">
           {{ errors.permission }}
@@ -122,24 +122,24 @@ export default {
       this.success.dismissCountDown = dismissCountDown
     },
 
-    async updateStatus(event, supplierId) {
+    async updateStatus(event, employeeId) {
       let data = []
 
       if (event === true) {
         data = {
           companyId: this.user.company_id,
-          supplierId: supplierId,
+          employeeId: employeeId,
           status: "A"
         }
       } else {
         data = {
           companyId: this.user.company_id,
-          supplierId: supplierId,
+          employeeId: employeeId,
           status: "I"
         }
       }
 
-      let response = await this.updateSupplierStatus(data)
+      let response = await this.updateEmployeeStatus(data)
 
       if (!response.errors) {
         this.success.dismissCountDown = this.success.dismissSecs
@@ -154,8 +154,8 @@ export default {
     },
 
     ...mapActions({
-      getCompanyEmployees: "employee/getAllCompanyEmployees",
-      updateSupplierStatus: "suppliers/updateSupplierStatus"
+      getCompanyEmployees: "company/getEmployees",
+      updateEmployeeStatus: "employee/updateStatus"
     })
   },
 
@@ -165,7 +165,7 @@ export default {
 
   computed: {
     ...mapGetters({
-      companyEmployees: "employee/companyEmployees",
+      companyEmployees: "company/employees",
       authenticated: "auth/authenticated",
       user: "auth/user"
     })

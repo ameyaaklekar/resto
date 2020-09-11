@@ -8,7 +8,7 @@
         variant="success"
         @dismiss-count-down="countDownChanged"
       >
-        Employee Added successfully
+        Employee Updated successfully
       </b-alert>
       <b-form @submit.prevent="submit">
         <b-row>

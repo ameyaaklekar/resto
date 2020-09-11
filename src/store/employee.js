@@ -62,16 +62,6 @@ export default {
       }
     },
 
-    async getAllCompanyEmployees({ commit }) {
-      try {
-        let response = await axios.get("api/employee/all")
-        commit("SET_EMPLOYEES", response.data)
-        return response.data
-      } catch (e) {
-        commit("SET_EMPLOYEES", null)
-      }
-    },
-
     async getEmployee({ commit }, employeeId) {
       try {
         let response = await axios.get("api/employee/" + employeeId + "/edit")
@@ -98,6 +88,18 @@ export default {
           return e.response.data
         }
       }
-    }
+    },
+
+    async updateStatus(_, data) {
+      try {
+        let response = await axios.patch(
+          "api/employee/update/change-status",
+          data
+        )
+        return response
+      } catch (e) {
+        return e.response.data
+      }
+    },
   }
 }
