@@ -19,6 +19,8 @@ Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 Vue.use(permissionConstants)
 
+axios.defaults.withCredentials = true
+
 Vue.config.productionTip = false
 
 Vue.mixin({
