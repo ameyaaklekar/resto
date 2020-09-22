@@ -27,7 +27,7 @@ export default {
   actions: {
     async getAllRoles({ commit }) {
       try {
-        let response = await axios.get("api/roles")
+        let response = await axios.get("roles")
         commit("SET_ROLES", response.data)
         return response.data
       } catch (e) {
@@ -37,7 +37,7 @@ export default {
 
     async getRolePermission(_, data) {
       try {
-        let response = await axios.get("api/roles/permission/" + data)
+        let response = await axios.get("roles/permission/" + data)
 
         if (!response.error) {
           return response.data
@@ -51,7 +51,7 @@ export default {
 
     async getAllPermissions() {
       try {
-        let response = await axios.get("api/permissions")
+        let response = await axios.get("permissions")
         if (!response.errors) {
           return response.data
         }
@@ -64,7 +64,7 @@ export default {
 
     async getEmployee({ commit }, employeeId) {
       try {
-        let response = await axios.get("api/employee/" + employeeId + "/edit")
+        let response = await axios.get("employee/" + employeeId + "/edit")
         if (!response.error) {
           commit("SET_EMPLOYEES", response.data)
           return response.data
@@ -79,7 +79,7 @@ export default {
 
     async updateEmployee(_, data) {
       try {
-        let response = await axios.put("api/employee/update", data)
+        let response = await axios.put("employee/update", data)
         if (!response.error) {
           return response.data
         }
@@ -92,10 +92,7 @@ export default {
 
     async updateStatus(_, data) {
       try {
-        let response = await axios.patch(
-          "api/employee/update/change-status",
-          data
-        )
+        let response = await axios.patch("employee/update/change-status", data)
         return response
       } catch (e) {
         return e.response.data

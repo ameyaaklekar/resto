@@ -8,9 +8,9 @@ import axios from "axios"
 import permissionConstants from "./constants/permissions"
 
 if (process.env.VUE_APP_PRODUCTION_MODE === "true") {
-  axios.defaults.baseURL = process.env.VUE_APP_LIVE_API
+  axios.defaults.baseURL = process.env.VUE_APP_LIVE_API + "/api"
 } else {
-  axios.defaults.baseURL = "http://localhost:8000"
+  axios.defaults.baseURL = "http://localhost:8000/api"
 }
 
 import "./assets/scss/main.scss"
@@ -18,8 +18,6 @@ import "./assets/scss/main.scss"
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 Vue.use(permissionConstants)
-
-axios.defaults.withCredentials = true
 
 Vue.config.productionTip = false
 

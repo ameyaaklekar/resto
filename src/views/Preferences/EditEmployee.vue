@@ -328,7 +328,7 @@ export default {
     async getPermissions() {
       let response
       if (this.permissions.length === 0) {
-        response = await axios.get("api/permissions")
+        response = await axios.get("permissions")
 
         if (!response.error) {
           Object.keys(response.data).forEach(key => {
