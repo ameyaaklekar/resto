@@ -26,16 +26,16 @@ export default {
   },
   actions: {
     async signIn({ commit, dispatch }, credentials) {
-      await axios.get("sanctum/csrf-cookie")
-
       try {
         let response = await axios.post("login", credentials)
         if (!response.errors) {
+          localStorage.setItem("Auth", response.data)
           await dispatch("getUser")
         }
         return response
       } catch (e) {
         commit("SET_AUTHENTICATION", null)
+        localStorage.removeItem("Auth")
         if (e.response.data.errors) {
           return e.response.data
         }
@@ -46,12 +46,17 @@ export default {
       await axios.post("logout")
       commit("SET_AUTHENTICATION", null)
       commit("SET_USER", null)
-      localStorage.removeItem("auth")
+      localStorage.removeItem("Auth")
     },
 
     async getUser({ commit }) {
       try {
-        let response = await axios.get("api/user")
+        let token = localStorage.getItem("Auth")
+
+        if (token) {
+          axios.defaults.headers.common["Authorization"] = `Bearer ${token}`
+        }
+        let response = await axios.get("user")
         commit("SET_AUTHENTICATION", true)
         commit("SET_USER", response.data)
       } catch (e) {
@@ -62,10 +67,9 @@ export default {
 
     async register(_, data) {
       try {
-        await axios.get("sanctum/csrf-cookie")
         let response = await axios.post("register", data)
         if (!response.errors) {
-          localStorage.setItem("auth", true)
+          localStorage.setItem("Auth", true)
         }
         return response
       } catch (e) {
@@ -77,7 +81,7 @@ export default {
 
     async updateUser({ commit }, data) {
       try {
-        let response = await axios.put("api/user/update", data)
+        let response = await axios.put("user/update", data)
         if (!response.errors) {
           commit("SET_USER", response.data)
         }

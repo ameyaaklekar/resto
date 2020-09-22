@@ -28,7 +28,7 @@ export default {
   actions: {
     async getCompanySuppliers({ commit }) {
       try {
-        let response = await axios.get("api/suppliers/all")
+        let response = await axios.get("suppliers/all")
         commit("SET_SUPPLIERS", response.data)
         return response.data
       } catch (e) {
@@ -39,7 +39,7 @@ export default {
     async updateSupplierStatus(_, data) {
       try {
         let response = await axios.put(
-          "api/suppliers/update/change-status",
+          "suppliers/update/change-status",
           data
         )
         return response
@@ -50,7 +50,7 @@ export default {
 
     async getSupplier({ commit }, supplierId) {
       try {
-        let response = await axios.get("api/suppliers/" + supplierId + "/edit")
+        let response = await axios.get("suppliers/" + supplierId + "/edit")
         if (!response.error) {
           commit("SET_SUPPLIER", response.data)
           return response.data
@@ -65,7 +65,7 @@ export default {
 
     async updateSupplier(_, data) {
       try {
-        let response = await axios.put("api/suppliers/update", data)
+        let response = await axios.put("suppliers/update", data)
         if (!response.error) {
           return response.data
         }

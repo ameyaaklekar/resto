@@ -73,7 +73,6 @@ export default {
 
     submit() {
       this.signIn(this.form).then(response => {
-        console.log()
         if (!response.errors) {
           if (this.$route.query.redirect) {
             this.$router.push(this.$route.query.redirect)

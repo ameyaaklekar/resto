@@ -19,7 +19,7 @@ export default {
   actions: {
     async getEmployees({ commit }) {
       try {
-        let response = await axios.get("api/company/employees")
+        let response = await axios.get("company/employees")
         commit("SET_EMPLOYEES", response.data)
         return response.data
       } catch (e) {
