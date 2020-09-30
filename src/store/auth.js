@@ -81,7 +81,7 @@ export default {
 
     async updateUser({ commit }, data) {
       try {
-        let response = await axios.put("user/update", data)
+        let response = await axios.put("user", data)
         if (!response.errors) {
           commit("SET_USER", response.data)
         }

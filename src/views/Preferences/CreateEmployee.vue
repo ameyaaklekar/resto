@@ -335,7 +335,7 @@ export default {
 
     async submit() {
       try {
-        let response = await axios.post("employee/add", this.form)
+        let response = await axios.post("employee", this.form)
         if (!response.errors) {
           this.form.firstName = ""
           this.form.lastName = ""

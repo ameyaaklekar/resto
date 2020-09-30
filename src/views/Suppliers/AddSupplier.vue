@@ -245,7 +245,7 @@ export default {
 
     async submit() {
       try {
-        let response = await axios.post("suppliers/add", this.form)
+        let response = await axios.post("suppliers", this.form)
         if (!response.errors) {
           this.form.name = ""
           this.form.countryCode = ""

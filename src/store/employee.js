@@ -64,7 +64,7 @@ export default {
 
     async getEmployee({ commit }, employeeId) {
       try {
-        let response = await axios.get("employee/" + employeeId + "/edit")
+        let response = await axios.get("employee/" + employeeId)
         if (!response.error) {
           commit("SET_EMPLOYEES", response.data)
           return response.data
@@ -79,7 +79,7 @@ export default {
 
     async updateEmployee(_, data) {
       try {
-        let response = await axios.put("employee/update", data)
+        let response = await axios.put("employee", data)
         if (!response.error) {
           return response.data
         }
@@ -92,7 +92,7 @@ export default {
 
     async updateStatus(_, data) {
       try {
-        let response = await axios.patch("employee/update/change-status", data)
+        let response = await axios.patch("employee/change-status", data)
         return response
       } catch (e) {
         return e.response.data
