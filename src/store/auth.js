@@ -84,7 +84,7 @@ export default {
       try {
         let response = await axios.put("user", data)
         if (!response.errors) {
-          commit("SET_USER", response.data)
+          commit("SET_USER", response.data.data)
         }
         return response
       } catch (e) {

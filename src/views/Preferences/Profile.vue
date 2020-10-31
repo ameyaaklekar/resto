@@ -11,6 +11,9 @@
       >
         Profile updated successfully
       </b-alert>
+      <b-alert v-model="error.show" fade variant="danger">
+        {{ error.message }}
+      </b-alert>
       <b-form @submit.prevent="submit">
         <b-row>
           <b-col md="6">
@@ -27,7 +30,7 @@
                 placeholder="First Name"
               ></b-form-input>
               <b-form-invalid-feedback :state="validate">
-                {{ errors.firstName }}
+                {{ error.data.firstName }}
               </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
@@ -42,7 +45,7 @@
                 placeholder="First Name"
               ></b-form-input>
               <b-form-invalid-feedback :state="validate">
-                {{ errors.lastName }}
+                {{ error.data.lastName }}
               </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
@@ -73,8 +76,8 @@
                   placeholder="Phone Number"
                 ></b-form-input>
                 <b-form-invalid-feedback :state="validate">
-                  {{ errors.countryCode }}
-                  {{ errors.phoneNumber }}
+                  {{ error.data.countryCode }}
+                  {{ error.data.phoneNumber }}
                 </b-form-invalid-feedback>
               </b-input-group>
             </b-form-group>
@@ -90,7 +93,7 @@
                 placeholder="Email"
               ></b-form-input>
               <b-form-invalid-feedback :state="validate">
-                {{ errors.email }}
+                {{ error.data.email }}
               </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
@@ -107,7 +110,7 @@
                 placeholder="Address"
               ></b-form-input>
               <b-form-invalid-feedback :state="validate">
-                {{ errors.address }}
+                {{ error.data.address }}
               </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
@@ -122,7 +125,7 @@
                 placeholder="City"
               ></b-form-input>
               <b-form-invalid-feedback :state="validate">
-                {{ errors.city }}
+                {{ error.data.city }}
               </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
@@ -139,7 +142,7 @@
                 placeholder="State"
               ></b-form-input>
               <b-form-invalid-feedback :state="validate">
-                {{ errors.state }}
+                {{ error.data.state }}
               </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
@@ -154,7 +157,7 @@
                 placeholder="Country"
               ></b-form-input>
               <b-form-invalid-feedback :state="validate">
-                {{ errors.country }}
+                {{ error.data.country }}
               </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
@@ -174,7 +177,7 @@
                 placeholder="Postal Address"
               ></b-form-input>
               <b-form-invalid-feedback :state="validate">
-                {{ errors.postalCode }}
+                {{ error.data.postalCode }}
               </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
@@ -233,9 +236,14 @@ export default {
       },
       success: {
         dismissSecs: 5,
-        dismissCountDown: 0
+        dismissCountDown: 0,
+        message: ""
       },
-      errors: []
+      error: {
+        message: "",
+        data: [],
+        show: false
+      }
     }
   },
 
@@ -245,7 +253,7 @@ export default {
 
   computed: {
     validate() {
-      return this.errors.length > 0
+      return this.error.data.length > 0
     },
 
     ...mapGetters({
@@ -256,7 +264,18 @@ export default {
   methods: {
     setData() {
       if (this.user) {
-        this.form = this.user
+        this.form.firstName = this.user.firstName
+        this.form.lastName = this.user.lastName
+        this.form.countryCode = this.user.countryCode
+        this.form.phoneNumber = this.user.phoneNumber
+        this.form.email = this.user.email
+        this.form.address = this.user.address
+        this.form.city = this.user.city
+        this.form.state = this.user.state
+        this.form.country = this.user.country
+        this.form.postalCode = this.user.postalCode
+        this.form.companyId = this.user.company.id
+        this.form.userId = this.user.id
       }
     },
 
@@ -269,7 +288,15 @@ export default {
         if (!response.errors) {
           this.success.dismissCountDown = this.success.dismissSecs
         } else {
-          this.errors = response.errors
+          let errors = response.errors
+          let errorArr = []
+          for (let i = 0; i < errors.length; i++) {
+            let key = errors[i].path[0]
+            errorArr[key] = errors[i].message
+          }
+          this.error.data = errorArr
+          this.error.message = response.message
+          this.error.show = true
         }
       })
     },
