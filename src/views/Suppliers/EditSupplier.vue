@@ -8,10 +8,10 @@
         variant="success"
         @dismiss-count-down="countDownChanged"
       >
-        Supplier Updated successfully
+        {{ success.message }}
       </b-alert>
-      <b-alert v-model="permissionError.show" fade variant="danger">
-        {{ errors.permission }}
+      <b-alert v-model="error.show" fade variant="danger">
+        {{ error.message }}
       </b-alert>
       <b-form @submit.prevent="submit">
         <b-row>
@@ -26,7 +26,7 @@
                 disabled
               ></b-form-input>
               <b-form-invalid-feedback :state="validate">
-                {{ errors.name }}
+                {{ error.data.name }}
               </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
@@ -40,7 +40,7 @@
                 placeholder="Contact Person"
               ></b-form-input>
               <b-form-invalid-feedback :state="validate">
-                {{ errors.contactPerson }}
+                {{ error.data.contactPerson }}
               </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
@@ -67,8 +67,8 @@
                   placeholder="Phone Number"
                 ></b-form-input>
                 <b-form-invalid-feedback :state="validate">
-                  {{ errors.countryCode }}
-                  {{ errors.contact }}
+                  {{ error.data.countryCode }}
+                  {{ error.data.contact }}
                 </b-form-invalid-feedback>
               </b-input-group>
             </b-form-group>
@@ -84,7 +84,7 @@
                 placeholder="Email"
               ></b-form-input>
               <b-form-invalid-feedback :state="validate">
-                {{ errors.email }}
+                {{ error.data.email }}
               </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
@@ -100,7 +100,7 @@
                 placeholder="Address"
               ></b-form-input>
               <b-form-invalid-feedback :state="validate">
-                {{ errors.address }}
+                {{ error.data.address }}
               </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
@@ -114,7 +114,7 @@
                 placeholder="City"
               ></b-form-input>
               <b-form-invalid-feedback :state="validate">
-                {{ errors.city }}
+                {{ error.data.city }}
               </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
@@ -130,7 +130,7 @@
                 placeholder="State"
               ></b-form-input>
               <b-form-invalid-feedback :state="validate">
-                {{ errors.state }}
+                {{ error.data.state }}
               </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
@@ -144,7 +144,7 @@
                 placeholder="Country"
               ></b-form-input>
               <b-form-invalid-feedback :state="validate">
-                {{ errors.country }}
+                {{ error.data.country }}
               </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
@@ -164,7 +164,7 @@
                 placeholder="Postal Address"
               ></b-form-input>
               <b-form-invalid-feedback :state="validate">
-                {{ errors.postalCode }}
+                {{ error.data.postalCode }}
               </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
@@ -201,7 +201,7 @@ export default {
 
   computed: {
     validate() {
-      return this.errors.length > 0
+      return this.error.data.length > 0
     },
 
     ...mapGetters({
@@ -230,12 +230,14 @@ export default {
       },
       success: {
         dismissSecs: 5,
-        dismissCountDown: 0
+        dismissCountDown: 0,
+        message: ""
       },
-      permissionError: {
+      error: {
+        message: "",
+        data: [],
         show: false
-      },
-      errors: []
+      }
     }
   },
 
@@ -246,43 +248,37 @@ export default {
     }),
 
     setData() {
-      this.form.name = this.supplier.name
-      this.form.countryCode = this.supplier.country_code
-      this.form.contact = this.supplier.contact
-      this.form.email = this.supplier.email
-      this.form.address = this.supplier.address
-      this.form.city = this.supplier.city
-      this.form.state = this.supplier.state
-      this.form.country = this.supplier.country
-      this.form.postalCode = this.supplier.postal_code
-      this.form.contactPerson = this.supplier.contact_person
-      this.form.supplierId = this.supplier.id
+      this.form.name = this.supplier.data.name
+      this.form.countryCode = this.supplier.data.country_code
+      this.form.contact = this.supplier.data.contact
+      this.form.email = this.supplier.data.email
+      this.form.address = this.supplier.data.address
+      this.form.city = this.supplier.data.city
+      this.form.state = this.supplier.data.state
+      this.form.country = this.supplier.data.country
+      this.form.postalCode = this.supplier.data.postal_code
+      this.form.contactPerson = this.supplier.data.contact_person
+      this.form.supplierId = this.supplier.data.id
     },
 
     countDownChanged(dismissCountDown) {
       this.success.dismissCountDown = dismissCountDown
-      this.permissionError.dismissCountDown = dismissCountDown
     },
 
     async submit() {
-      try {
-        let response = this.updateSupplier(this.form).then(() => {
-          if (!response.errors) {
-            this.getSupplier(this.supplierId).then(() => {
-              this.setData()
-
-              this.success.dismissCountDown = this.success.dismissSecs
-              this.permissionError.show = false
-            })
-          }
+      let response = await this.updateSupplier(this.form)
+      if (response.success) {
+        this.getSupplier(this.supplierId).then(() => {
+          this.setData()
+          this.success.dismissCountDown = this.success.dismissSecs
+          this.success.message = response.message
+          this.error.show = false
         })
-      } catch (e) {
-        if (e.response.data.errors) {
-          this.errors = e.response.data.errors
-
-          if (this.errors.permission.length > 0) {
-            this.permissionError.show = true
-          }
+      } else {
+        if (!response.success) {
+          this.error.data = response.data.errors
+          this.error.show = true
+          this.error.message = response.data.message
         }
       }
     }

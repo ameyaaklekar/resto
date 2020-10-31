@@ -8,12 +8,12 @@
         variant="success"
         @dismiss-count-down="countDownChanged"
       >
-        Supplier's status changed successfully
+        {{ success.message }}
       </b-alert>
-      <b-alert v-model="permissionError.show" fade variant="danger">
-        {{ errors.permission }}
+      <b-alert v-model="error.show" fade variant="danger">
+        {{ error.message }}
       </b-alert>
-      <template v-if="suppliers.length > 0">
+      <template v-if="suppliers">
         <div class="table-responsive">
           <table class="table table-sm">
             <thead class="thead-light">
@@ -81,12 +81,14 @@ export default {
     return {
       success: {
         dismissSecs: 5,
-        dismissCountDown: 0
+        dismissCountDown: 0,
+        message: ""
       },
-      permissionError: {
+      error: {
+        message: "",
+        data: [],
         show: false
       },
-      errors: [],
       suppliers: []
     }
   },
@@ -124,16 +126,14 @@ export default {
       }
 
       let response = await this.updateSupplierStatus(data)
-
-      if (!response.errors) {
+      if (response.success) {
         this.success.dismissCountDown = this.success.dismissSecs
-        this.permissionError.show = false
+        this.error.show = false
+        this.success.message = response.message
       } else {
-        this.errors = response.errors
-
-        if (this.errors.permission.length > 0) {
-          this.permissionError.show = true
-        }
+        this.error.data = response.errors
+        this.error.show = true
+        this.error.message = response.message
       }
     },
 
