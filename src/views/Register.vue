@@ -4,6 +4,9 @@
       <div class="row justify-content-md-center">
         <div class="col-md-5">
           <h1 class="text-center">Register</h1>
+          <b-alert v-model="error.show" fade variant="danger">
+            {{ error.message }}
+          </b-alert>
           <b-form @submit.prevent="submit">
             <b-form-group
               id="companyName"
@@ -18,7 +21,7 @@
                 placeholder="Company Name"
               ></b-form-input>
               <b-form-invalid-feedback :state="validate">
-                {{ errors["company.name"] }}
+                {{ error.data.company }}
               </b-form-invalid-feedback>
             </b-form-group>
 
@@ -35,7 +38,7 @@
                 placeholder="First Name"
               ></b-form-input>
               <b-form-invalid-feedback :state="validate">
-                {{ errors.firstName }}
+                {{ error.data.firstName }}
               </b-form-invalid-feedback>
             </b-form-group>
 
@@ -48,7 +51,7 @@
                 placeholder="First Name"
               ></b-form-input>
               <b-form-invalid-feedback :state="validate">
-                {{ errors.lastName }}
+                {{ error.data.lastName }}
               </b-form-invalid-feedback>
             </b-form-group>
 
@@ -75,8 +78,8 @@
                   placeholder="Phone Number"
                 ></b-form-input>
                 <b-form-invalid-feedback :state="validate">
-                  {{ errors.countryCode }}
-                  {{ errors.phoneNumber }}
+                  {{ error.data.countryCode }}
+                  {{ error.data.phoneNumber }}
                 </b-form-invalid-feedback>
               </b-input-group>
             </b-form-group>
@@ -90,7 +93,7 @@
                 placeholder="Email"
               ></b-form-input>
               <b-form-invalid-feedback :state="validate">
-                {{ errors.email }}
+                {{ error.data.email }}
               </b-form-invalid-feedback>
             </b-form-group>
 
@@ -103,7 +106,7 @@
                 placeholder="Password"
               ></b-form-input>
               <b-form-invalid-feedback :state="validate">
-                {{ errors.password }}
+                {{ error.data.password }}
               </b-form-invalid-feedback>
             </b-form-group>
 
@@ -119,6 +122,9 @@
                 required
                 placeholder="Confirm Password"
               ></b-form-input>
+              <b-form-invalid-feedback :state="validate">
+                {{ error.data.password_confirmation }}
+              </b-form-invalid-feedback>
             </b-form-group>
             <b-form-group id="recaptcha">
               <vue-recaptcha
@@ -129,7 +135,7 @@
               >
               </vue-recaptcha>
               <b-form-invalid-feedback :state="validate">
-                {{ errors.recaptcha }}
+                {{ error.data.recaptcha }}
               </b-form-invalid-feedback>
             </b-form-group>
             <b-button type="submit" block variant="primary">Register</b-button>
@@ -165,13 +171,17 @@ export default {
         password_confirmation: "",
         robot: false
       },
-      errors: []
+      error: {
+        message: "",
+        data: [],
+        show: false
+      }
     }
   },
 
   computed: {
     validate() {
-      return this.errors.length > 0
+      return this.error.data.length > 0
     }
   },
 
@@ -185,17 +195,29 @@ export default {
       if (this.form.robot) {
         this.register(this.form).then(response => {
           if (!response.errors) {
+            this.error.data = []
+            this.error.message = ""
+            this.error.show = false
             this.getUser().then(() => {
               this.$router.replace({
                 name: "Dashboard"
               })
             })
           } else {
-            this.errors = response.errors
+            let errors = response.errors
+            let errorArr = []
+            for (let i = 0; i < errors.length; i++) {
+              let key = errors[i].path[0]
+              errorArr[key] = errors[i].message
+            }
+            console.log(response);
+            this.error.data = errorArr
+            this.error.message = response.message
+            this.error.show = true
           }
         })
       } else {
-        this.errors = {
+        this.error.data = {
           recaptcha: "Please verify the recaptcha"
         }
       }
