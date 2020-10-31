@@ -28,10 +28,10 @@
           <!-- Using 'button-content' slot -->
           <template v-slot:button-content>
             <b-avatar variant="info" class="profile-dropdown__img"></b-avatar>
-            {{ user.company.display_name }}
+            {{ user.company.displayName }}
           </template>
           <b-dropdown-text style="min-width: 240px;">
-            <strong>{{ user.first_name }} {{ user.last_name }}</strong>
+            <strong>{{ user.firstName }} {{ user.lastName }}</strong>
             <br>
             <i>{{ user.email }}</i>
           </b-dropdown-text>

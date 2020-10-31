@@ -29,7 +29,7 @@ export default {
       try {
         let response = await axios.post("login", credentials)
         if (!response.errors) {
-          localStorage.setItem("Auth", response.data)
+          localStorage.setItem("Auth", response.data.data)
           await dispatch("getUser")
         }
         return response
@@ -58,8 +58,9 @@ export default {
         }
         let response = await axios.get("user")
         commit("SET_AUTHENTICATION", true)
-        commit("SET_USER", response.data)
+        commit("SET_USER", response.data.data)
       } catch (e) {
+        localStorage.removeItem("Auth")
         commit("SET_AUTHENTICATION", null)
         commit("SET_USER", null)
       }

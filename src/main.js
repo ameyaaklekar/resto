@@ -28,7 +28,7 @@ Vue.mixin({
     checkPermissions(user, permission) {
       if (user && user.permissions.length > 0) {
         var hasPermisisons = user.permissions.filter(function(el) {
-          return el.name == permission
+          return el.codeName == permission
         })
 
         return hasPermisisons.length > 0 ? true : false

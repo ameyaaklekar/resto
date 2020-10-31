@@ -210,7 +210,6 @@ export default {
               let key = errors[i].path[0]
               errorArr[key] = errors[i].message
             }
-            console.log(response);
             this.error.data = errorArr
             this.error.message = response.message
             this.error.show = true

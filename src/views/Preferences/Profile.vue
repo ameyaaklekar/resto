@@ -256,18 +256,7 @@ export default {
   methods: {
     setData() {
       if (this.user) {
-        this.form.firstName = this.user.first_name
-        this.form.lastName = this.user.last_name
-        this.form.countryCode = this.user.country_code
-        this.form.phoneNumber = this.user.phone_number
-        this.form.email = this.user.email
-        this.form.address = this.user.address
-        this.form.city = this.user.city
-        this.form.state = this.user.state
-        this.form.country = this.user.country
-        this.form.postalCode = this.user.postal_code
-        this.form.companyId = this.user.company_id
-        this.form.userId = this.user.id
+        this.form = this.user
       }
     },
 
