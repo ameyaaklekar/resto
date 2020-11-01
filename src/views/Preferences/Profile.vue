@@ -194,17 +194,17 @@
           *Note: Please contact your manager to update your details
         </strong>
       </p>
-      <p><strong>Name:</strong> {{ user.first_name }} {{ user.last_name }}</p>
+      <p><strong>Name:</strong> {{ user.firstName }} {{ user.lastName }}</p>
       <p>
-        <strong>Phone Number:</strong> +{{ user.country_code }}
-        {{ user.phone_number }}
+        <strong>Phone Number:</strong> +{{ user.countryCode }}
+        {{ user.phoneNumber }}
       </p>
       <p><strong>Email:</strong> {{ user.email }}</p>
       <p><strong>Address:</strong> {{ user.address }}</p>
       <p><strong>City:</strong> {{ user.city }}</p>
       <p><strong>State:</strong> {{ user.state }}</p>
       <p><strong>Country:</strong> {{ user.country }}</p>
-      <p><strong>Postal Code:</strong> {{ user.postal_code }}</p>
+      <p><strong>Postal Code:</strong> {{ user.postalCode }}</p>
     </template>
   </div>
 </template>

@@ -27,8 +27,8 @@ export default {
   actions: {
     async getAllRoles({ commit }) {
       try {
-        let response = await axios.get("roles")
-        commit("SET_ROLES", response.data)
+        let response = await axios.get("role")
+        commit("SET_ROLES", response.data.data)
         return response.data
       } catch (e) {
         commit("SET_ROLES", null)
@@ -37,10 +37,10 @@ export default {
 
     async getRolePermission(_, data) {
       try {
-        let response = await axios.get("roles/permission/" + data)
+        let response = await axios.get("role/permission/" + data)
 
         if (!response.error) {
-          return response.data
+          return response.data.data
         }
       } catch (e) {
         if (e.response.data.errors) {
@@ -51,7 +51,7 @@ export default {
 
     async getAllPermissions() {
       try {
-        let response = await axios.get("permissions")
+        let response = await axios.get("permission")
         if (!response.errors) {
           return response.data
         }

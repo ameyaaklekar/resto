@@ -288,8 +288,8 @@ export default {
       Object.keys(roles).forEach(key => {
         let role = roles[key] // value of the current key
         this.allRoles.push({
-          value: role.name,
-          text: role.display_name
+          value: role.codeName,
+          text: role.name
         })
       })
     },
@@ -302,14 +302,14 @@ export default {
       let response
 
       if (this.permissions.length === 0) {
-        response = await axios.get("permissions")
+        response = await axios.get("permission")
 
         if (!response.error) {
-          Object.keys(response.data).forEach(key => {
-            let permission = response.data[key] // value of the current key
+          Object.keys(response.data.data).forEach(key => {
+            let permission = response.data.data[key] // value of the current key
             this.permissions.push({
-              value: permission.name,
-              text: permission.display_name
+              value: permission.codeName,
+              text: permission.name
             })
           })
         } else {
@@ -323,7 +323,7 @@ export default {
           this.form.permissions = []
           Object.keys(response).forEach(key => {
             let rolePermission = response[key] // value of the current key
-            this.form.permissions.push(rolePermission.name)
+            this.form.permissions.push(rolePermission.codeName)
           })
         } else {
           this.errors = response.errors
