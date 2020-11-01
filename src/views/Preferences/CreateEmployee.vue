@@ -10,6 +10,9 @@
       >
         Employee Added successfully
       </b-alert>
+      <b-alert v-model="error.show" fade variant="danger">
+        {{ error.message }}
+      </b-alert>
       <b-form @submit.prevent="submit">
         <b-row>
           <b-col md="6">
@@ -26,7 +29,7 @@
                 placeholder="First Name"
               ></b-form-input>
               <b-form-invalid-feedback :state="validate">
-                {{ errors.firstName }}
+                {{ error.data.firstName }}
               </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
@@ -41,7 +44,7 @@
                 placeholder="First Name"
               ></b-form-input>
               <b-form-invalid-feedback :state="validate">
-                {{ errors.lastName }}
+                {{ error.data.lastName }}
               </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
@@ -72,8 +75,8 @@
                   placeholder="Phone Number"
                 ></b-form-input>
                 <b-form-invalid-feedback :state="validate">
-                  {{ errors.countryCode }}
-                  {{ errors.phoneNumber }}
+                  {{ error.data.countryCode }}
+                  {{ error.data.phoneNumber }}
                 </b-form-invalid-feedback>
               </b-input-group>
             </b-form-group>
@@ -89,7 +92,7 @@
                 placeholder="Email"
               ></b-form-input>
               <b-form-invalid-feedback :state="validate">
-                {{ errors.email }}
+                {{ error.data.email }}
               </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
@@ -105,7 +108,7 @@
                 placeholder="Address"
               ></b-form-input>
               <b-form-invalid-feedback :state="validate">
-                {{ errors.address }}
+                {{ error.data.address }}
               </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
@@ -119,7 +122,7 @@
                 placeholder="City"
               ></b-form-input>
               <b-form-invalid-feedback :state="validate">
-                {{ errors.city }}
+                {{ error.data.city }}
               </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
@@ -135,7 +138,7 @@
                 placeholder="State"
               ></b-form-input>
               <b-form-invalid-feedback :state="validate">
-                {{ errors.state }}
+                {{ error.data.state }}
               </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
@@ -149,7 +152,7 @@
                 placeholder="Country"
               ></b-form-input>
               <b-form-invalid-feedback :state="validate">
-                {{ errors.country }}
+                {{ error.data.country }}
               </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
@@ -168,7 +171,7 @@
                 placeholder="Postal Address"
               ></b-form-input>
               <b-form-invalid-feedback :state="validate">
-                {{ errors.postalCode }}
+                {{ error.data.postalCode }}
               </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
@@ -185,11 +188,10 @@
             <b-form-select
               v-model="form.role"
               :options="allRoles"
-              required
               @change="getPermissions($event)"
             ></b-form-select>
             <b-form-invalid-feedback :state="validate">
-              {{ errors.role }}
+              {{ error.data.role }}
             </b-form-invalid-feedback>
           </b-col>
         </b-row>
@@ -233,7 +235,7 @@ export default {
 
   computed: {
     validate() {
-      return this.errors.length > 0
+      return this.error.data.length > 0
     },
 
     ...mapGetters({
@@ -260,18 +262,23 @@ export default {
         role: "",
         permissions: []
       },
-      success: {
-        dismissSecs: 5,
-        dismissCountDown: 0
-      },
-      errors: [],
       allRoles: [
         {
           text: "Please select the role",
           value: ""
         }
       ],
-      permissions: []
+      permissions: [],
+      success: {
+        dismissSecs: 5,
+        dismissCountDown: 0,
+        message: ""
+      },
+      error: {
+        message: "",
+        data: [],
+        show: false
+      }
     }
   },
 
@@ -282,7 +289,7 @@ export default {
     }),
 
     setData() {
-      this.form.companyId = this.user.company_id
+      this.form.companyId = this.user.company.id
       let roles = this.roles
 
       Object.keys(roles).forEach(key => {
@@ -313,7 +320,7 @@ export default {
             })
           })
         } else {
-          this.errors = response.errors
+          this.error.data = response.errors
         }
       }
 
@@ -326,7 +333,7 @@ export default {
             this.form.permissions.push(rolePermission.codeName)
           })
         } else {
-          this.errors = response.errors
+          this.error.data = response.errors
         }
       } else {
         this.permissions = []
@@ -351,13 +358,23 @@ export default {
           this.form.role = ""
           this.form.permissions = []
           this.permissions = []
-          this.errors = []
+          this.error.data = []
+          this.error.message = ""
+          this.error.show = false
 
           this.success.dismissCountDown = this.success.dismissSecs
         }
       } catch (e) {
         if (e.response.data.errors) {
-          this.errors = e.response.data.errors
+          let errors = e.response.data.errors
+          let errorArr = []
+          for (let i = 0; i < errors.length; i++) {
+            let key = errors[i].path[0]
+            errorArr[key] = errors[i].message
+          }
+          this.error.data = errorArr
+          this.error.show = true
+          this.error.message = e.response.data.message
         }
       }
     }

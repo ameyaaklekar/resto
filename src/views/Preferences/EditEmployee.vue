@@ -287,19 +287,19 @@ export default {
   methods: {
     setData() {
       if (this.employee) {
-        this.form.firstName = this.employee.first_name
-        this.form.lastName = this.employee.last_name
-        this.form.countryCode = this.employee.country_code
-        this.form.phoneNumber = this.employee.phone_number
+        this.form.firstName = this.employee.firstName
+        this.form.lastName = this.employee.lastName
+        this.form.countryCode = this.employee.countryCode
+        this.form.phoneNumber = this.employee.phoneNumber
         this.form.email = this.employee.email
         this.form.address = this.employee.address
         this.form.city = this.employee.city
         this.form.state = this.employee.state
         this.form.country = this.employee.country
-        this.form.postalCode = this.employee.postal_code
-        this.form.companyId = this.employee.company_id
+        this.form.postalCode = this.employee.postalCode
+        this.form.companyId = this.employee.company.id
         this.form.userId = this.employee.id
-        this.form.role = this.employee.roles[0].name
+        this.form.role = this.employee.roles[0].codeName
         this.form.employeeId = this.employeeId
 
         let roles = this.roles
@@ -307,8 +307,8 @@ export default {
         Object.keys(roles).forEach(key => {
           let role = roles[key] // value of the current key
           this.allRoles.push({
-            value: role.name,
-            text: role.display_name
+            value: role.codeName,
+            text: role.name
           })
         })
 
@@ -319,7 +319,7 @@ export default {
 
           Object.keys(employeePermissions).forEach(key => {
             let rolePermission = employeePermissions[key] // value of the current key
-            this.form.permissions.push(rolePermission.name)
+            this.form.permissions.push(rolePermission.codeName)
           })
         }
       }
@@ -328,14 +328,14 @@ export default {
     async getPermissions() {
       let response
       if (this.permissions.length === 0) {
-        response = await axios.get("permissions")
+        response = await axios.get("permission")
 
         if (!response.error) {
-          Object.keys(response.data).forEach(key => {
-            let permission = response.data[key] // value of the current key
+          Object.keys(response.data.data).forEach(key => {
+            let permission = response.data.data[key] // value of the current key
             this.permissions.push({
-              value: permission.name,
-              text: permission.display_name
+              value: permission.codeName,
+              text: permission.name
             })
           })
         } else {
@@ -347,11 +347,12 @@ export default {
     async getPermisisonRole(event) {
       if (event.length > 0) {
         let response = await this.getRolePermissions(event)
+        console.log(response)
         if (!response.error) {
           this.form.permissions = []
           Object.keys(response).forEach(key => {
             let rolePermission = response[key] // value of the current key
-            this.form.permissions.push(rolePermission.name)
+            this.form.permissions.push(rolePermission.codeName)
           })
         } else {
           this.errors = response.errors

@@ -19,9 +19,9 @@ export default {
   actions: {
     async getEmployees({ commit }) {
       try {
-        let response = await axios.get("company/employees")
-        commit("SET_EMPLOYEES", response.data)
-        return response.data
+        let response = await axios.get("employee")
+        commit("SET_EMPLOYEES", response.data.data)
+        return response.data.data
       } catch (e) {
         commit("SET_EMPLOYEES", null)
       }

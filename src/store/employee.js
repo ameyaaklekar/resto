@@ -29,7 +29,7 @@ export default {
       try {
         let response = await axios.get("role")
         commit("SET_ROLES", response.data.data)
-        return response.data
+        return response.data.data
       } catch (e) {
         commit("SET_ROLES", null)
       }
@@ -66,7 +66,7 @@ export default {
       try {
         let response = await axios.get("employee/" + employeeId)
         if (!response.error) {
-          commit("SET_EMPLOYEES", response.data)
+          commit("SET_EMPLOYEES", response.data.data)
           return response.data
         }
       } catch (e) {

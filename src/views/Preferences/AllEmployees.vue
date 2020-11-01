@@ -28,12 +28,12 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="employee in employees" :key="employee.id">
-                  <th scope="row">{{ employee.id }}</th>
-                  <td>{{ employee.first_name }} {{ employee.last_name }}</td>
+                <tr v-for="(employee, index) in employees" :key="employee.id">
+                  <th scope="row">{{ (index += 1) }}</th>
+                  <td>{{ employee.firstName }} {{ employee.lastName }}</td>
                   <td>{{ employee.email }}</td>
                   <td>
-                    +{{ employee.country_code }} {{ employee.phone_number }}
+                    +{{ employee.countryCode }} {{ employee.phoneNumber }}
                   </td>
                   <td>
                     <b-form-checkbox
